@@ -4,6 +4,7 @@ import React from 'react';
 import { useRequest } from 'umi';
 import ListTabs from './components/ListTabs';
 import NavigationList from './components/NavigationList';
+import TicketHeader from './components/TicketHeader';
 import TicketList from './components/TicketList';
 
 const Ticket: React.FC = () => {
@@ -14,6 +15,7 @@ const Ticket: React.FC = () => {
   return (
     <>
       <Card style={{ minHeight: 1000 }}>
+        <TicketHeader />
         <ListTabs />
         {/* TODO 处理右侧有多的 */}
         <Row>

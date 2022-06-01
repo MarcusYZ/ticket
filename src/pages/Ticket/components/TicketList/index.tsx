@@ -7,10 +7,12 @@ import {
   FunnelPlotOutlined,
 } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Col, Dropdown, List, Menu, Row, Skeleton } from 'antd';
+import { Avatar, Button, Col, Dropdown, List, Menu, Popover, Row, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { ListType } from '../../enum';
 import { getTypeColor } from '../../util';
+import TicketInfoCard from '../TicketInfoCard';
+import UserInfoCard from '../UserInfoCard';
 import styles from './index.less';
 import ListHeader from './ListHeader';
 const count = 3;
@@ -160,90 +162,12 @@ const TicketList = () => {
                   bordered
                   style={{ background: '#fafafa' }}
                 >
-                  <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 12 }} />
-                  移动端的页面出现异常
-                </ProCard>
-                <ProCard
-                  colSpan={4}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82, justifyContent: 'center' }}
-                >
-                  <FieldTimeOutlined style={{ marginRight: 4 }} /> 待运维处理
-                </ProCard>
-                <ProCard
-                  colSpan={2}
-                  layout="center"
-                  bordered
-                  style={{
-                    background: getTypeColor(ListType.NORMAL),
-                    height: 82,
-                    color: '#ffffff',
-                  }}
-                >
-                  低
-                </ProCard>
-                <ProCard
-                  colSpan={4}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82 }}
-                >
-                  2021-04-08 01:18
-                </ProCard>
-                <ProCard
-                  colSpan={5}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82 }}
-                >
-                  逾期 3 天 22 小时 24 分
-                </ProCard>
-                <ProCard
-                  colSpan={2}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82 }}
-                >
-                  <Dropdown overlay={menu}>
-                    <EllipsisOutlined style={{ transform: 'rotate(90deg)' }} />
-                  </Dropdown>
-                </ProCard>
-              </ProCard>
-            </Skeleton>
-          </List.Item>
-        )}
-      />
-      {/* 正常 */}
-      <ListHeader text="正常" type={ListType.NORMAL} />
-      <TitleRender />
-      <List
-        className="demo-loadmore-list"
-        loading={initLoading}
-        itemLayout="horizontal"
-        loadMore={loadMore}
-        dataSource={list}
-        renderItem={(item) => (
-          <List.Item
-            style={{
-              paddingLeft: 20,
-              marginBottom: 4,
-              padding: 0,
-              borderBottom: 0,
-              height: 82,
-            }}
-          >
-            <Skeleton avatar title={false} loading={item.loading} active>
-              <ProCard ghost gutter={8}>
-                <ProCard
-                  colSpan={7}
-                  className={styles.cardText}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa' }}
-                >
-                  <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 12 }} />
-                  移动端的页面出现异常
+                  <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
+                    <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 12 }} />
+                  </Popover>
+                  <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
+                    移动端的页面出现异常
+                  </Popover>
                 </ProCard>
                 <ProCard
                   colSpan={4}
