@@ -5,22 +5,22 @@ import {
   SearchOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Avatar, Col, Input, Row } from 'antd';
+import { Avatar, Button, Col, Input, Row } from 'antd';
 import React from 'react';
 
 const TicketHeader: React.FC = () => {
   return (
     <Row justify="space-between">
       <Col>
-        <MenuOutlined /> <span>Tickets</span>
+        <Button type="text" shape="circle" icon={<MenuOutlined />} /> <span>Tickets</span>
+      </Col>
+      <Col span={12}>
+        <Input placeholder="Search" prefix={<SearchOutlined />} />
       </Col>
       <Col>
-        <Input placeholder="Enter your username" prefix={<SearchOutlined />} />
-      </Col>
-      <Col>
-        <AppstoreOutlined />
-        <SettingOutlined />
-        <BellOutlined />
+        <Button type="text" shape="circle" icon={<AppstoreOutlined />} />
+        <Button type="text" shape="circle" icon={<SettingOutlined />} />
+        <Button type="text" shape="circle" icon={<BellOutlined />} />
         <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 12 }} />
       </Col>
     </Row>
