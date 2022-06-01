@@ -1,6 +1,6 @@
 import { getTicketList } from '@/services/swagger/ticket';
-import { Card, Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Card } from 'antd';
+import React, { useState } from 'react';
 import { useRequest } from 'umi';
 import ListTabs from './components/ListTabs';
 import NavigationList from './components/NavigationList';
@@ -10,10 +10,6 @@ import TicketList from './components/TicketList';
 const Ticket: React.FC = () => {
   const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false);
   const { data } = useRequest(getTicketList);
-
-  useEffect(() => {
-    console.log(navigationListVisible, 'navigationListVisible');
-  }, [navigationListVisible]);
 
   console.log(data, 'Data');
 
@@ -25,17 +21,14 @@ const Ticket: React.FC = () => {
           setNavigationListVisible={setNavigationListVisible}
         />
         <ListTabs />
-        {/* TODO 处理右侧有多的 */}
-        <Row>
-          {navigationListVisible ? (
-            <Col>
-              <NavigationList />
-            </Col>
-          ) : null}
-          <Col offset={navigationListVisible ? 1 : 0}>
-            <TicketList />
-          </Col>
-        </Row>
+        {navigationListVisible ? (
+          <div style={{ width: '20%', float: 'left' }}>
+            <NavigationList />
+          </div>
+        ) : null}
+        <div style={{ width: navigationListVisible ? '75%' : '100%', float: 'right' }}>
+          <TicketList />
+        </div>
       </Card>
     </>
   );
