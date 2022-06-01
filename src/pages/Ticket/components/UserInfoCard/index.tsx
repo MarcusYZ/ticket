@@ -8,7 +8,7 @@ const UserInfoCard: React.FC = () => {
     <Card
       hoverable
       style={{ width: 240 }}
-      cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+      cover={<img alt="example" src="https://joeschmoe.io/api/v1/random" />}
     >
       <Meta title="曹晓蕾" description="Director, Partner Technology" />
     </Card>

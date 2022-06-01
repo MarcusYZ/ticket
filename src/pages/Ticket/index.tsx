@@ -28,6 +28,9 @@ const Ticket: React.FC = () => {
         ) : null}
         <div style={{ width: navigationListVisible ? '75%' : '100%', float: 'right' }}>
           <TicketList />
+          {/* <TicketList />
+          <TicketList />
+          <TicketList /> */}
         </div>
       </Card>
     </>

@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Avatar, Button, Col, Input, Row } from 'antd';
 import React from 'react';
+import styles from './index.less';
 
 interface TicketHeaderProps {
   navigationListVisible: boolean; // 侧边栏是否收起
@@ -23,8 +24,8 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           shape="circle"
           icon={<MenuOutlined />}
           onClick={() => setNavigationListVisible(!navigationListVisible)}
-        />{' '}
-        <span>Tickets</span>
+        />
+        <span className={styles.headerTitleText}>Tickets</span>
       </Col>
       <Col span={12}>
         <Input placeholder="Search" prefix={<SearchOutlined />} />
