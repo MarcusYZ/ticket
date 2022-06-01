@@ -15,6 +15,8 @@ const Settings: LayoutSettings & {
   headerHeight: 48,
   splitMenus: false,
   menuHeaderRender: false,
+  menuRender: false,
+  headerRender: false,
 };
 
 export default Settings;

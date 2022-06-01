@@ -2,7 +2,7 @@ import { DownOutlined, ExclamationCircleFilled, IdcardOutlined } from '@ant-desi
 import { Avatar, Divider, List } from 'antd';
 import styles from './index.less';
 
-const NavigationList = () => (
+const NavigationList: React.FC = () => (
   <div style={{ width: 200, display: 'inline' }}>
     <List split={false}>
       <List.Item>

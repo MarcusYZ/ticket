@@ -8,11 +8,23 @@ import {
 import { Avatar, Button, Col, Input, Row } from 'antd';
 import React from 'react';
 
-const TicketHeader: React.FC = () => {
+interface TicketHeaderProps {
+  navigationListVisible: boolean; // 侧边栏是否收起
+  setNavigationListVisible: React.Dispatch<React.SetStateAction<boolean>>; // 设置侧边栏是否收起
+}
+const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
+  const { navigationListVisible, setNavigationListVisible } = props;
+
   return (
     <Row justify="space-between">
       <Col>
-        <Button type="text" shape="circle" icon={<MenuOutlined />} /> <span>Tickets</span>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<MenuOutlined />}
+          onClick={() => setNavigationListVisible(!navigationListVisible)}
+        />{' '}
+        <span>Tickets</span>
       </Col>
       <Col span={12}>
         <Input placeholder="Search" prefix={<SearchOutlined />} />
