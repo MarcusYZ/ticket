@@ -67,10 +67,12 @@ const TicketList = () => {
         {
           label: '编辑',
           key: 'edit',
+          disabled: true,
         },
         {
           label: '删除',
           key: 'delete',
+          disabled: true,
         },
       ]}
     />
