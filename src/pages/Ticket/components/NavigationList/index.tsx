@@ -1,6 +1,6 @@
 import { getNearestTicketList } from '@/services/swagger/ticket';
 import { DownOutlined, ExclamationCircleFilled, IdcardOutlined } from '@ant-design/icons';
-import { Avatar, Button, Divider, List } from 'antd';
+import { Avatar, Button, Divider, List, Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import styles from './index.less';
@@ -20,15 +20,43 @@ const NavigationList: React.FC = () => {
     console.log(data, currentTicketsData, 'test');
   }, [data]);
 
+  // 表单点击方法
+  const onMenuClick = () => {
+    console.log(1);
+  };
+
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: any[], // TODO 类型调整
+    type?: 'group',
+  ): any {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    } as any;
+  }
+
+  const items: any[] = [
+    getItem('事件', '1', <ExclamationCircleFilled />),
+    getItem('报备', '2', <IdcardOutlined />),
+  ];
+
   return (
     <div style={{ width: 200, display: 'inline' }}>
-      <List split={false}>
-        <List.Item>
-          <ExclamationCircleFilled style={{ marginRight: 21, marginLeft: 25 }} /> 事件
-        </List.Item>
-        <List.Item>
-          <IdcardOutlined style={{ marginRight: 21, marginLeft: 25 }} /> 报备
-        </List.Item>
+      <List split={false} className={styles.menuItem}>
+        <Menu
+          onClick={onMenuClick}
+          style={{ width: 242, borderRightWidth: 0 }}
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={['sub1']}
+          mode="inline"
+          items={items}
+        />
       </List>
       <Divider orientation="left" />
       <List.Item className={styles.recentTicket}>近期工单</List.Item>

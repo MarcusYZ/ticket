@@ -6,3 +6,14 @@
   line-height: 20px;
   text-align: left;
 }
+
+.menuItem {
+  :global(.ant-menu-inline .ant-menu-item-selected::after) {
+    transform: none;
+    opacity: 0;
+  }
+  :global(.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected) {
+    color: #757575;
+    background-color: #e9e9e9;
+  }
+}
