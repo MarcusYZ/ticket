@@ -123,9 +123,15 @@ const TicketList = () => {
     return (
       <Row justify="end">
         <Col>
-          <ExpandOutlined style={{ marginRight: 8 }} />
-          <ControlOutlined style={{ marginRight: 8 }} />
-          <FunnelPlotOutlined />
+          <Button>
+            <ExpandOutlined style={{ marginRight: 8 }} />
+          </Button>
+          <Button>
+            <ControlOutlined style={{ marginRight: 8 }} />
+          </Button>
+          <Button>
+            <FunnelPlotOutlined />
+          </Button>
         </Col>
       </Row>
     );

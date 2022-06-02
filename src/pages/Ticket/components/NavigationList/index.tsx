@@ -106,7 +106,7 @@ const NavigationList: React.FC = () => {
         )}
       />
       <Divider orientation="left" />
-      <List split={false}>
+      <List split={false} style={{ cursor: 'pointer' }}>
         <List.Item className={styles.recentTicket}>常用场景</List.Item>
         <List.Item className={styles.recentTicket}>新系统问题反馈</List.Item>
         <List.Item className={styles.recentTicket}>日常运营</List.Item>
