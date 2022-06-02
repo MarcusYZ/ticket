@@ -8,7 +8,7 @@ import TopControl from './components/TopControl';
 import { ListType } from './enum';
 
 const Ticket: React.FC = () => {
-  const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false);
+  const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false); // 左侧导航栏显隐
 
   return (
     <>

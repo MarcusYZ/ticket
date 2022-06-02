@@ -105,7 +105,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
 
   return (
     <div style={{ marginBottom: 64 }}>
-      <ListHeader num={LEVEL_THREE_NUM} text="Escalation Level 3" type={themeType} />
+      <ListHeader num={LEVEL_THREE_NUM} type={themeType} />
       <TitleRender />
       <List
         className="demo-loadmore-list"
@@ -116,7 +116,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
         renderItem={(item) => (
           <List.Item
             style={{
-              borderLeft: '4px solid',
+              borderLeft: themeType !== ListType.NORMAL ? '4px solid' : 0,
               borderLeftColor: getTypeColor(themeType),
               paddingLeft: 20,
               borderRadius: '3px 0 0 3px',
