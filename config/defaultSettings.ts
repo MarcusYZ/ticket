@@ -17,6 +17,7 @@ const Settings: LayoutSettings & {
   menuHeaderRender: false,
   menuRender: false,
   headerRender: false,
+  footerRender: false,
 };
 
 export default Settings;
