@@ -17,7 +17,6 @@ const NavigationList: React.FC = () => {
 
   useEffect(() => {
     if (data) setCurrentTicketsData([...data].splice(0, 4));
-    console.log(data, currentTicketsData, 'test');
   }, [data]);
 
   // 表单点击方法
@@ -81,13 +80,6 @@ const NavigationList: React.FC = () => {
                 {item.info}
               </h4>
             </List.Item>
-            {console.log(
-              index < data.length - 1 &&
-                index === currentTicketsData.length - 1 &&
-                currentTicketsData.length !== 0,
-              index,
-              'index',
-            )}
             {index < data.length - 1 &&
             index === currentTicketsData.length - 1 &&
             currentTicketsData.length !== 0 ? (

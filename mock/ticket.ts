@@ -1,6 +1,16 @@
 import { Request, Response } from 'express';
 
-const getTicketList = (req: Request, res: Response) => {
+// 等待
+const waitTime = (time: number = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};
+
+const getTicketList = async (req: Request, res: Response) => {
+  await waitTime(1000);
   res.json({
     data: [
       {
@@ -16,12 +26,8 @@ const getTicketList = (req: Request, res: Response) => {
         info: '3号饮水机损坏',
       },
       {
-        avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
-        info: '4号饮水机损坏',
-      },
-      {
         avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
-        info: '5号饮水机损坏',
+        info: '4号饮水机损坏',
       },
     ],
   });
