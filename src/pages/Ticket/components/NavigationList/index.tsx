@@ -54,13 +54,13 @@ const NavigationList: React.FC = () => {
               </h4>
             </List.Item>
             {console.log(
-              index < data.length &&
+              index < data.length - 1 &&
                 index === currentTicketsData.length - 1 &&
                 currentTicketsData.length !== 0,
               index,
               'index',
             )}
-            {index < data.length &&
+            {index < data.length - 1 &&
             index === currentTicketsData.length - 1 &&
             currentTicketsData.length !== 0 ? (
               <List.Item>
