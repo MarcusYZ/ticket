@@ -1,63 +1,48 @@
-import {
-  ControlOutlined,
-  DownOutlined,
-  EllipsisOutlined,
-  ExpandOutlined,
-  FieldTimeOutlined,
-  FunnelPlotOutlined,
-} from '@ant-design/icons';
+import { getTicketList } from '@/services/swagger/ticket';
+import { DownOutlined, EllipsisOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Col, Dropdown, List, Menu, Popover, Row, Skeleton } from 'antd';
+import { Avatar, Button, Col, Dropdown, List, Menu, Popover, Row } from 'antd';
 import { useEffect, useState } from 'react';
+import { useRequest } from 'umi';
 import { ListType } from '../../enum';
 import { getTypeColor } from '../../util';
 import TicketInfoCard from '../TicketInfoCard';
 import UserInfoCard from '../UserInfoCard';
 import styles from './index.less';
 import ListHeader from './ListHeader';
-const count = 3;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+const LEVEL_THREE_NUM = 8;
 
-const TicketList = () => {
-  const [initLoading, setInitLoading] = useState(true); // 初始加载状态
-  const [loading, setLoading] = useState(false); // 加载状态
-  const [data, setData] = useState([]); // 数据
+interface TicketListProps {
+  themeType: API.ListType; // 颜色
+}
+
+const TicketList: React.FC<TicketListProps> = (props) => {
+  const { themeType } = props;
   const [list, setList] = useState([]); // 列表
+  const { data, loading } = useRequest(getTicketList);
+  const [handleLoading, setHandleLoading] = useState<boolean>(false);
 
   // 更新
   useEffect(() => {
-    fetch(fakeDataUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        setInitLoading(false);
-        setData(res.results);
-        setList(res.results);
-      });
-  }, []);
+    setList(data || []);
+  }, [data]);
 
-  const onLoadMore = () => {
-    setLoading(true);
-    setList(
-      data.concat(
-        [...new Array(count)].map(() => ({
-          loading: true,
-          name: {},
-          picture: {},
-        })),
-      ),
-    );
-    fetch(fakeDataUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        const newData = data.concat(res.results);
-        setData(newData);
-        setList(newData);
-        setLoading(false); // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-        // In real scene, you can using public method of react-virtualized:
-        // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
+  // 等待
+  const waitTime = (time: number = 100) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, time);
+    });
+  };
 
-        window.dispatchEvent(new Event('resize'));
-      });
+  // 加载更多
+  const onLoadMore = async () => {
+    const newData = list.concat(data);
+    setHandleLoading(true);
+    await waitTime(1000);
+    setList(newData);
+    setHandleLoading(false);
   };
 
   // 下拉框
@@ -102,7 +87,7 @@ const TicketList = () => {
 
   // 加载按钮
   const loadMore =
-    !initLoading && !loading ? (
+    list.length < LEVEL_THREE_NUM ? (
       <div
         style={{
           textAlign: 'right',
@@ -118,33 +103,13 @@ const TicketList = () => {
       </div>
     ) : null;
 
-  // 顶部功能
-  const TopFunction = () => {
-    return (
-      <Row justify="end">
-        <Col>
-          <Button type="text">
-            <ExpandOutlined />
-          </Button>
-          <Button type="text">
-            <ControlOutlined />
-          </Button>
-          <Button type="text">
-            <FunnelPlotOutlined />
-          </Button>
-        </Col>
-      </Row>
-    );
-  };
-
   return (
-    <>
-      <TopFunction />
-      <ListHeader text="Escalation Level 3" type={ListType.DANGER} />
+    <div style={{ marginBottom: 64 }}>
+      <ListHeader num={LEVEL_THREE_NUM} text="Escalation Level 3" type={themeType} />
       <TitleRender />
       <List
         className="demo-loadmore-list"
-        loading={initLoading}
+        loading={loading || handleLoading}
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={list}
@@ -152,7 +117,7 @@ const TicketList = () => {
           <List.Item
             style={{
               borderLeft: '4px solid',
-              borderLeftColor: getTypeColor(ListType.DANGER),
+              borderLeftColor: getTypeColor(themeType),
               paddingLeft: 20,
               borderRadius: '3px 0 0 3px',
               marginBottom: 4,
@@ -161,74 +126,72 @@ const TicketList = () => {
               height: 82,
             }}
           >
-            <Skeleton avatar title={false} loading={item.loading} active>
-              <ProCard ghost gutter={8}>
-                <ProCard
-                  colSpan={7}
-                  className={styles.cardText}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa' }}
-                >
-                  <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
-                    <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 12 }} />
-                  </Popover>
-                  <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
-                    移动端的页面出现异常
-                  </Popover>
-                </ProCard>
-                <ProCard
-                  colSpan={4}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82, justifyContent: 'center' }}
-                >
-                  <FieldTimeOutlined style={{ marginRight: 4 }} /> 待运维处理
-                </ProCard>
-                <ProCard
-                  colSpan={2}
-                  layout="center"
-                  bordered
-                  style={{
-                    background: getTypeColor(ListType.NORMAL),
-                    height: 82,
-                    color: '#ffffff',
-                  }}
-                >
-                  低
-                </ProCard>
-                <ProCard
-                  colSpan={4}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82 }}
-                >
-                  2021-04-08 01:18
-                </ProCard>
-                <ProCard
-                  colSpan={5}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82 }}
-                >
-                  逾期 3 天 22 小时 24 分
-                </ProCard>
-                <ProCard
-                  colSpan={2}
-                  layout="center"
-                  bordered
-                  style={{ background: '#fafafa', height: 82 }}
-                >
-                  <Dropdown overlay={menu}>
-                    <EllipsisOutlined style={{ transform: 'rotate(90deg)' }} />
-                  </Dropdown>
-                </ProCard>
+            <ProCard ghost gutter={8}>
+              <ProCard
+                colSpan={7}
+                className={styles.cardText}
+                layout="center"
+                bordered
+                style={{ background: '#fafafa' }}
+              >
+                <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
+                  <Avatar src={item.avatarUrl} style={{ marginRight: 12 }} />
+                </Popover>
+                <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
+                  {item.info}
+                </Popover>
               </ProCard>
-            </Skeleton>
+              <ProCard
+                colSpan={4}
+                layout="center"
+                bordered
+                style={{ background: '#fafafa', height: 82, justifyContent: 'center' }}
+              >
+                <FieldTimeOutlined style={{ marginRight: 4 }} /> 待运维处理
+              </ProCard>
+              <ProCard
+                colSpan={2}
+                layout="center"
+                bordered
+                style={{
+                  background: getTypeColor(ListType.NORMAL),
+                  height: 82,
+                  color: '#ffffff',
+                }}
+              >
+                低
+              </ProCard>
+              <ProCard
+                colSpan={4}
+                layout="center"
+                bordered
+                style={{ background: '#fafafa', height: 82 }}
+              >
+                2021-04-08 01:18
+              </ProCard>
+              <ProCard
+                colSpan={5}
+                layout="center"
+                bordered
+                style={{ background: '#fafafa', height: 82 }}
+              >
+                逾期 3 天 22 小时 24 分
+              </ProCard>
+              <ProCard
+                colSpan={2}
+                layout="center"
+                bordered
+                style={{ background: '#fafafa', height: 82 }}
+              >
+                <Dropdown overlay={menu}>
+                  <EllipsisOutlined style={{ transform: 'rotate(90deg)' }} />
+                </Dropdown>
+              </ProCard>
+            </ProCard>
           </List.Item>
         )}
       />
-    </>
+    </div>
   );
 };
 
