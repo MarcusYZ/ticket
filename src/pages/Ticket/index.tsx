@@ -4,18 +4,11 @@ import ListTabs from './components/ListTabs';
 import NavigationList from './components/NavigationList';
 import TicketHeader from './components/TicketHeader';
 import TicketList from './components/TicketList';
-<<<<<<< HEAD
 import TopControl from './components/TopControl';
 import { ListType } from './enum';
 
 const Ticket: React.FC = () => {
   const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false); // 左侧导航栏显隐
-=======
-import { ListType } from './enum';
-
-const Ticket: React.FC = () => {
-  const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false);
->>>>>>> 1022a7014dc614804d3edaccde4ba873e38fccfe
 
   return (
     <>
@@ -35,11 +28,8 @@ const Ticket: React.FC = () => {
         ) : null}
         {/* 列表 */}
         <div style={{ width: navigationListVisible ? '75%' : '100%', float: 'right' }}>
-<<<<<<< HEAD
           {/* 顶部控制项 */}
           <TopControl />
-=======
->>>>>>> 1022a7014dc614804d3edaccde4ba873e38fccfe
           {/* level3 */}
           <TicketList themeType={ListType.DANGER} />
           {/* level2 */}

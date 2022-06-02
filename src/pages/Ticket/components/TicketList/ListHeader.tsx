@@ -6,19 +6,11 @@ import styles from './index.less';
 
 interface ListHeaderProps {
   num: number; // 数量
-<<<<<<< HEAD
-=======
-  text: string; // 文字
->>>>>>> 1022a7014dc614804d3edaccde4ba873e38fccfe
   type: API.ListType; // 类型
 }
 
 const ListHeader: React.FC<ListHeaderProps> = (props) => {
-<<<<<<< HEAD
   const { num = 0, type = ListType.NORMAL } = props;
-=======
-  const { num = 0, text = '', type = ListType.NORMAL } = props;
->>>>>>> 1022a7014dc614804d3edaccde4ba873e38fccfe
 
   const getTitle = () => {
     switch (type) {
