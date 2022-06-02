@@ -18,6 +18,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
 
   return (
     <Row justify="space-between">
+      {/* 控制导航栏展示隐藏 */}
       <Col>
         <Button
           type="text"
@@ -27,9 +28,11 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
         />
         <span className={styles.headerTitleText}>Tickets</span>
       </Col>
+      {/* 搜索栏 */}
       <Col span={12}>
         <Input placeholder="Search" prefix={<SearchOutlined />} />
       </Col>
+      {/* 头像等按钮 */}
       <Col>
         <Button type="text" shape="circle" icon={<AppstoreOutlined />} />
         <Button type="text" shape="circle" icon={<SettingOutlined />} />

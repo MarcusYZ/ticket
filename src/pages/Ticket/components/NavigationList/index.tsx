@@ -102,6 +102,7 @@ const NavigationList: React.FC = () => {
 
   return (
     <div style={{ width: 200, display: 'inline' }}>
+      {/* 菜单项 */}
       <List split={false} className={styles.menuItem}>
         <Menu
           onClick={onMenuClick}
@@ -113,6 +114,7 @@ const NavigationList: React.FC = () => {
         />
       </List>
       <Divider orientation="left" />
+      {/* 近期工单 */}
       <List.Item className={styles.recentTicket}>近期工单</List.Item>
       <List split={false} dataSource={currentTicketsData} renderItem={renderItem} />
       {/* 常用场景 */}
