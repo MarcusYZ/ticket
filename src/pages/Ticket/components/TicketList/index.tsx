@@ -123,13 +123,13 @@ const TicketList = () => {
     return (
       <Row justify="end">
         <Col>
-          <Button>
-            <ExpandOutlined style={{ marginRight: 8 }} />
+          <Button type="text">
+            <ExpandOutlined />
           </Button>
-          <Button>
-            <ControlOutlined style={{ marginRight: 8 }} />
+          <Button type="text">
+            <ControlOutlined />
           </Button>
-          <Button>
+          <Button type="text">
             <FunnelPlotOutlined />
           </Button>
         </Col>

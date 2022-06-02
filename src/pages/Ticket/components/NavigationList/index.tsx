@@ -67,7 +67,7 @@ const NavigationList: React.FC = () => {
           <>
             <List.Item>
               <Avatar
-                src="https://joeschmoe.io/api/v1/random"
+                src={item.avatarUrl}
                 style={{ marginRight: 21, marginLeft: 25, width: 20, height: 20 }}
               />
               <h4
@@ -78,7 +78,7 @@ const NavigationList: React.FC = () => {
                   textOverflow: 'ellipsis',
                 }}
               >
-                咖啡机损坏
+                {item.info}
               </h4>
             </List.Item>
             {console.log(
