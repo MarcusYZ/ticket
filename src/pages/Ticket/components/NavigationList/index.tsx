@@ -49,7 +49,7 @@ const NavigationList: React.FC = () => {
   const commonSceneRender = (
     <>
       <Divider orientation="left" />
-      <List split={false} style={{ cursor: 'pointer' }}>
+      <List className={styles.scene} split={false}>
         <List.Item className={styles.recentTicket}>常用场景</List.Item>
         <List.Item className={styles.recentTicket}>新系统问题反馈</List.Item>
         <List.Item className={styles.recentTicket}>日常运营</List.Item>
@@ -62,11 +62,7 @@ const NavigationList: React.FC = () => {
   // 更多按钮
   const moreButton = (
     <List.Item>
-      <Button
-        type="text"
-        onClick={() => setCurrentTicketsData(data)}
-        style={{ marginRight: 21, marginLeft: 10 }}
-      >
+      <Button type="text" onClick={() => setCurrentTicketsData(data)} className={styles.moreButton}>
         <DownOutlined />
         更多
       </Button>
@@ -77,20 +73,8 @@ const NavigationList: React.FC = () => {
   const renderItem = (item: TicketItem, index: number) => (
     <>
       <List.Item>
-        <Avatar
-          src={item.avatarUrl}
-          style={{ marginRight: 21, marginLeft: 25, width: 20, height: 20 }}
-        />
-        <h4
-          style={{
-            width: 120,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {item.info}
-        </h4>
+        <Avatar src={item.avatarUrl} className={styles.sceneAvatar} />
+        <h4 className={styles.sceneText}>{item.info}</h4>
       </List.Item>
       {index < data.length - 1 &&
       index === currentTicketsData.length - 1 &&
@@ -101,12 +85,12 @@ const NavigationList: React.FC = () => {
   );
 
   return (
-    <div style={{ width: 200, display: 'inline' }}>
+    <div className={styles.navigationWrapper}>
       {/* 菜单项 */}
       <List split={false} className={styles.menuItem}>
         <Menu
           onClick={onMenuClick}
-          style={{ width: 242, borderRightWidth: 0 }}
+          className={styles.navigationMenu}
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
           mode="inline"

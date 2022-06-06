@@ -37,7 +37,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
         <Button type="text" shape="circle" icon={<AppstoreOutlined />} />
         <Button type="text" shape="circle" icon={<SettingOutlined />} />
         <Button type="text" shape="circle" icon={<BellOutlined />} />
-        <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 12 }} />
+        <Avatar src="https://joeschmoe.io/api/v1/random" className={styles.headerAvatar} />
       </Col>
     </Row>
   );

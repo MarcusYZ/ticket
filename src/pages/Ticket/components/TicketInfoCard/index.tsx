@@ -11,7 +11,7 @@ import styles from './index.less';
 const ListItem = List.Item;
 const TicketInfoCard: React.FC = () => {
   return (
-    <List split={false} style={{ width: 568, height: 304 }}>
+    <List split={false} className={styles.infoCard}>
       <ListItem>
         <BulbOutlined /> <span className={styles.infoCardText}>日常运营</span>
       </ListItem>
@@ -22,20 +22,14 @@ const TicketInfoCard: React.FC = () => {
         员工在制作咖啡时，咖啡机把手周边出现渗漏，影响正常使用。员工在制作咖啡时，咖啡机把手周边出现渗漏，影响正常使用，需尽快维修
       </ListItem>
       <ListItem>
-        <FieldTimeOutlined />{' '}
-        <span style={{ marginRight: 8 }} className={styles.infoCardText}>
-          耗时 3 小时 26 分
-        </span>
-        <HddOutlined />{' '}
-        <span style={{ marginRight: 8 }} className={styles.infoCardText}>
-          E1029568
-        </span>
+        <FieldTimeOutlined /> <span className={styles.infoCardText}>耗时 3 小时 26 分</span>
+        <HddOutlined /> <span className={styles.infoCardText}>E1029568</span>
         <ExclamationCircleOutlined color="red" /> <span className={styles.infoCardText}>紧急</span>
       </ListItem>
       <ListItem>
         <Row>
           <Col>
-            <Button style={{ marginRight: 8 }}>撤销</Button>
+            <Button className={styles.operateCancel}>撤销</Button>
             <Button>重新提交</Button>
           </Col>
           {/* <Col>

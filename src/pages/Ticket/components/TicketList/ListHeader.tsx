@@ -27,14 +27,12 @@ const ListHeader: React.FC<ListHeaderProps> = (props) => {
   const badgeRender = (
     <Badge
       count={num}
-      style={{ marginLeft: 40, backgroundColor: getTypeColor(type), marginBottom: 4 }}
+      style={{ backgroundColor: getTypeColor(type) }}
+      className={styles.headerBadge}
     />
   );
   return (
-    <h2
-      className={styles.text}
-      style={{ color: getTypeColor(type), fontSize: '26px', lineHeight: '31px' }}
-    >
+    <h2 className={styles.text} style={{ color: getTypeColor(type) }}>
       {getTitle()}
       {type !== ListType.NORMAL ? badgeRender : null}
     </h2>

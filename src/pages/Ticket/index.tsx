@@ -6,6 +6,7 @@ import TicketHeader from './components/TicketHeader';
 import TicketList from './components/TicketList';
 import TopControl from './components/TopControl';
 import { ListType } from './enum';
+import styles from './index.less';
 
 const Ticket: React.FC = () => {
   const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false); // 左侧导航栏显隐
@@ -22,12 +23,15 @@ const Ticket: React.FC = () => {
         <ListTabs />
         {/* 导航列表 */}
         {navigationListVisible ? (
-          <div style={{ width: '20%', float: 'left' }}>
+          <div className={styles.navigationPercent}>
             <NavigationList />
           </div>
         ) : null}
         {/* 列表 */}
-        <div style={{ width: navigationListVisible ? '75%' : '100%', float: 'right' }}>
+        <div
+          className={styles.ticketList}
+          style={{ width: navigationListVisible ? '75%' : '100%' }}
+        >
           {/* 顶部控制项 */}
           <TopControl />
           {/* level3 */}

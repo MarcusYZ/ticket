@@ -65,7 +65,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
 
   // title
   const TitleRender = () => (
-    <Row gutter={8} style={{ marginBottom: 8 }}>
+    <Row gutter={8} className={styles.title}>
       <Col span={7} />
       <Col className="gutter-row" span={4}>
         <div className={styles.listTitle}>状态</div>
@@ -88,15 +88,8 @@ const TicketList: React.FC<TicketListProps> = (props) => {
   // 加载按钮
   const loadMore =
     list.length < LEVEL_THREE_NUM ? (
-      <div
-        style={{
-          textAlign: 'right',
-          marginTop: 12,
-          height: 32,
-          lineHeight: '32px',
-        }}
-      >
-        <Button onClick={onLoadMore} style={{ borderRadius: 15 }}>
+      <div className={styles.moreButtonWrapper}>
+        <Button className={styles.moreButton} onClick={onLoadMore}>
           <DownOutlined />
           还有4条
         </Button>
@@ -104,7 +97,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
     ) : null;
 
   return (
-    <div style={{ marginBottom: 64 }}>
+    <div className={styles.listWrapper}>
       <ListHeader num={LEVEL_THREE_NUM} type={themeType} />
       <TitleRender />
       <List
@@ -118,73 +111,41 @@ const TicketList: React.FC<TicketListProps> = (props) => {
             style={{
               borderLeft: themeType !== ListType.NORMAL ? '4px solid' : 0,
               borderLeftColor: getTypeColor(themeType),
-              paddingLeft: 20,
-              borderRadius: '3px 0 0 3px',
-              marginBottom: 4,
-              padding: 0,
-              borderBottom: 0,
-              height: 82,
             }}
+            className={styles.listItem}
           >
             <ProCard ghost gutter={8}>
-              <ProCard
-                colSpan={7}
-                className={styles.cardText}
-                layout="center"
-                bordered
-                style={{ background: '#fafafa' }}
-              >
+              <ProCard colSpan={7} className={styles.cardText} layout="center" bordered>
                 <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
-                  <Avatar src={item.avatarUrl} style={{ marginRight: 12 }} />
+                  <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
                 </Popover>
                 <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
                   {item.info}
                 </Popover>
               </ProCard>
-              <ProCard
-                colSpan={4}
-                layout="center"
-                bordered
-                style={{ background: '#fafafa', height: 82, justifyContent: 'center' }}
-              >
-                <FieldTimeOutlined style={{ marginRight: 4 }} /> 待运维处理
+              <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
+                <FieldTimeOutlined className={styles.listItemIcon} /> 待运维处理
               </ProCard>
               <ProCard
                 colSpan={2}
                 layout="center"
                 bordered
+                className={styles.listItemCard_level}
                 style={{
                   background: getTypeColor(ListType.NORMAL),
-                  height: 82,
-                  color: '#ffffff',
                 }}
               >
                 低
               </ProCard>
-              <ProCard
-                colSpan={4}
-                layout="center"
-                bordered
-                style={{ background: '#fafafa', height: 82 }}
-              >
+              <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_common}>
                 2021-04-08 01:18
               </ProCard>
-              <ProCard
-                colSpan={5}
-                layout="center"
-                bordered
-                style={{ background: '#fafafa', height: 82 }}
-              >
+              <ProCard colSpan={5} layout="center" bordered className={styles.listItemCard_common}>
                 逾期 3 天 22 小时 24 分
               </ProCard>
-              <ProCard
-                colSpan={2}
-                layout="center"
-                bordered
-                style={{ background: '#fafafa', height: 82 }}
-              >
+              <ProCard colSpan={2} layout="center" bordered className={styles.listItemCard_common}>
                 <Dropdown overlay={menu}>
-                  <EllipsisOutlined style={{ transform: 'rotate(90deg)' }} />
+                  <EllipsisOutlined className={styles.listItemOperate} />
                 </Dropdown>
               </ProCard>
             </ProCard>
