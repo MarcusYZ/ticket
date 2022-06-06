@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import { ListType } from '../../enum';
 import type { TicketItem } from '../../typings';
-import { getTypeColor } from '../../util';
+import { getPriorityText, getTypeColor } from '../../util';
 import TicketInfoCard from '../TicketInfoCard';
 import UserInfoCard from '../UserInfoCard';
 import styles from './index.less';
@@ -125,7 +125,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
                 </Popover>
               </ProCard>
               <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
-                <FieldTimeOutlined className={styles.listItemIcon} /> 待运维处理
+                <FieldTimeOutlined className={styles.listItemIcon} /> {item.status}
               </ProCard>
               <ProCard
                 colSpan={2}
@@ -133,16 +133,16 @@ const TicketList: React.FC<TicketListProps> = (props) => {
                 bordered
                 className={styles.listItemCard_level}
                 style={{
-                  background: getTypeColor(ListType.NORMAL),
+                  background: getTypeColor(item.priority),
                 }}
               >
-                低
+                {getPriorityText(item.priority)}
               </ProCard>
               <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_common}>
-                2021-04-08 01:18
+                {item.date}
               </ProCard>
               <ProCard colSpan={5} layout="center" bordered className={styles.listItemCard_common}>
-                逾期 3 天 22 小时 24 分
+                {item.time}
               </ProCard>
               <ProCard colSpan={2} layout="center" bordered className={styles.listItemCard_common}>
                 <Dropdown overlay={menu}>

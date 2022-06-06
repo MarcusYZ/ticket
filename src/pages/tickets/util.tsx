@@ -13,3 +13,17 @@ export const getTypeColor = (type: API.ListType): string => {
       return '#333333';
   }
 };
+
+// 获取优先级对应的文字
+export const getPriorityText = (type: API.ListType) => {
+  switch (type) {
+    case ListType.DANGER:
+      return '紧急';
+    case ListType.WARN:
+      return '高';
+    case ListType.COMMON:
+      return '中';
+    default:
+      return '低';
+  }
+};
