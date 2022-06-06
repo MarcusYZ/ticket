@@ -1,6 +1,5 @@
 import { Card } from 'antd';
 import React, { useState } from 'react';
-import ListTabs from './components/ListTabs';
 import NavigationList from './components/NavigationList';
 import TicketHeader from './components/TicketHeader';
 import TicketList from './components/TicketList';
@@ -12,15 +11,13 @@ const Ticket: React.FC = () => {
   const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false); // 左侧导航栏显隐
 
   return (
-    <>
-      <Card style={{ minHeight: 1000 }}>
+    <div className={styles.cardWrapper}>
+      <Card style={{ minHeight: 1000, paddingTop: 0 }}>
         {/* 头部 */}
         <TicketHeader
           navigationListVisible={navigationListVisible}
           setNavigationListVisible={setNavigationListVisible}
         />
-        {/* Tab页 */}
-        <ListTabs />
         {/* 导航列表 */}
         {navigationListVisible ? (
           <div className={styles.navigationPercent}>
@@ -44,7 +41,7 @@ const Ticket: React.FC = () => {
           <TicketList themeType={ListType.NORMAL} />
         </div>
       </Card>
-    </>
+    </div>
   );
 };
 
