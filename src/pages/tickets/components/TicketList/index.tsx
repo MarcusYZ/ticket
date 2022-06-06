@@ -90,7 +90,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
   const loadMore =
     list.length < LEVEL_THREE_NUM ? (
       <div className={styles.moreButtonWrapper}>
-        <Button className={styles.moreButton} onClick={onLoadMore}>
+        <Button loading={handleLoading} className={styles.moreButton} onClick={onLoadMore}>
           <DownOutlined />
           还有4条
         </Button>
@@ -103,7 +103,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
       <TitleRender />
       <List
         className="demo-loadmore-list"
-        loading={loading || handleLoading}
+        loading={loading}
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={list}
