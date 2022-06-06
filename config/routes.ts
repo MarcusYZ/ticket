@@ -17,7 +17,7 @@
     path: '/ticket',
     name: 'Tickets',
     icon: 'smile',
-    component: './Ticket',
+    component: './tickets',
   },
   {
     path: '/',

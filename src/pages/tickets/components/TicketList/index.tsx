@@ -5,6 +5,7 @@ import { Avatar, Button, Col, Dropdown, List, Menu, Popover, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import { ListType } from '../../enum';
+import type { TicketItem } from '../../typings';
 import { getTypeColor } from '../../util';
 import TicketInfoCard from '../TicketInfoCard';
 import UserInfoCard from '../UserInfoCard';
@@ -106,7 +107,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={list}
-        renderItem={(item) => (
+        renderItem={(item: TicketItem) => (
           <List.Item
             style={{
               borderLeft: themeType !== ListType.NORMAL ? '4px solid' : 0,

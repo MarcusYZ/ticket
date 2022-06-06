@@ -3,13 +3,8 @@ import { DownOutlined, ExclamationCircleFilled, IdcardOutlined } from '@ant-desi
 import { Avatar, Button, Divider, List, Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
+import type { TicketItem } from '../../typings';
 import styles from './index.less';
-
-// 工单
-type TicketItem = {
-  info: string; // 信息
-  avatarUrl: string; // 头像地址
-};
 
 const NavigationList: React.FC = () => {
   const { data } = useRequest(getNearestTicketList); // 获取近期工单
