@@ -3,10 +3,12 @@ import {
   ProFormDatePicker,
   ProFormSelect,
   ProFormText,
+  ProFormTextArea,
   ProFormUploadDragger,
 } from '@ant-design/pro-components';
 import { Divider, message } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
+import ConfirmCancel from '../ConfrimCancel';
 
 const formLayoutType = {
   labelCol: { span: 4 },
@@ -22,6 +24,7 @@ interface ticketCreateAndEditProps {
 
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const { id, visible = false, trigger, setVisible } = props;
+  const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
 
   // 等待时间
   const waitTime = (time: number = 100) => {
@@ -46,7 +49,9 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         }}
         submitTimeout={2000}
         onVisibleChange={(v) => {
-          setVisible(v);
+          // 当取消并且当前数据为空时 TODO
+          console.log('触发', v);
+          if (v === false) setConfirmVisible(true);
         }}
         onFinish={async (values) => {
           await waitTime(2000);
@@ -62,9 +67,9 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           tooltip="最长为 24 位"
           placeholder="请输入名称"
         />
-        <ProFormText name="name" label="详细说明" tooltip="最长为 24 位" placeholder="请输入名称" />
+        <ProFormTextArea name="text" label="详细说明" placeholder="请输入..." />
         <Divider />
-        <ProFormText name="name" label="详细说明" tooltip="最长为 24 位" placeholder="请输入名称" />
+        <ProFormText name="name" label="咨询员工" tooltip="最长为 24 位" placeholder="请输入名称" />
         <ProFormText name="name" label="所属团队" tooltip="最长为 24 位" placeholder="请输入名称" />
         <ProFormSelect
           name="select"
@@ -79,6 +84,8 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         <ProFormDatePicker width={634} name="expirationTime" label="发生时间" />
         <ProFormUploadDragger max={4} label="上传表单" name="dragger" />
       </ModalForm>
+      {/* 确认取消 */}
+      <ConfirmCancel visible={confirmVisible} setVisible={setConfirmVisible} confirm={setVisible} />
     </>
   );
 };
