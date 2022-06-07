@@ -4,11 +4,11 @@ import {
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
-  ProFormUploadDragger,
 } from '@ant-design/pro-components';
-import { Divider, message } from 'antd';
+import { Divider, Form } from 'antd';
 import React, { useState } from 'react';
 import ConfirmCancel from '../ConfrimCancel';
+import TicketUpload from '../TicketUpload';
 
 const formLayoutType = {
   labelCol: { span: 4 },
@@ -26,15 +26,6 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const { id, visible = false, trigger, setVisible } = props;
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
 
-  // 等待时间
-  const waitTime = (time: number = 100) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, time);
-    });
-  };
-
   return (
     <>
       <ModalForm
@@ -44,20 +35,19 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         trigger={trigger}
         layout="horizontal"
         autoFocusFirstInput
-        modalProps={{
-          onCancel: () => console.log('run'),
+        onValuesChange={(v) => {
+          console.log(v);
         }}
-        submitTimeout={2000}
         onVisibleChange={(v) => {
           // 当取消并且当前数据为空时 TODO
           console.log('触发', v);
           if (v === false) setConfirmVisible(true);
         }}
-        onFinish={async (values) => {
-          await waitTime(2000);
-          console.log(values.name);
-          message.success('提交成功');
-          return true;
+        onFinish={async () => {
+          // await waitTime(2000);
+          // console.log(values.name);
+          // message.success('提交成功');
+          // return true;
         }}
       >
         <ProFormText
@@ -82,7 +72,10 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           rules={[{ required: true, message: 'Please select your country!' }]}
         />
         <ProFormDatePicker width={634} name="expirationTime" label="发生时间" />
-        <ProFormUploadDragger max={4} label="上传表单" name="dragger" />
+        {/* <ProFormUploadDragger max={4} label="上传表单" name="dragger" /> */}
+        <Form.Item label="上传菜单">
+          <TicketUpload />
+        </Form.Item>
       </ModalForm>
       {/* 确认取消 */}
       <ConfirmCancel visible={confirmVisible} setVisible={setConfirmVisible} confirm={setVisible} />
