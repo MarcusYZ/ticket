@@ -15,10 +15,11 @@ const LEVEL_THREE_NUM = 8;
 
 interface TicketListProps {
   themeType: API.ListType; // 颜色
+  setVisible: any; // 控制表单的显隐
 }
 
 const TicketList: React.FC<TicketListProps> = (props) => {
-  const { themeType } = props;
+  const { themeType, setVisible } = props;
   const [list, setList] = useState([]); // 列表
   const { data, loading } = useRequest(getTicketList);
   const [handleLoading, setHandleLoading] = useState<boolean>(false);
@@ -53,12 +54,13 @@ const TicketList: React.FC<TicketListProps> = (props) => {
         {
           label: '编辑',
           key: 'edit',
-          disabled: true,
+          onClick: () => {
+            setVisible(true);
+          },
         },
         {
           label: '删除',
           key: 'delete',
-          disabled: true,
         },
       ]}
     />

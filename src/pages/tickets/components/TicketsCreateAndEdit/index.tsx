@@ -5,7 +5,7 @@ import {
   ProFormText,
   ProFormUploadDragger,
 } from '@ant-design/pro-components';
-import { Button, Divider, message } from 'antd';
+import { Divider, message } from 'antd';
 import React from 'react';
 
 const formLayoutType = {
@@ -16,10 +16,12 @@ const formLayoutType = {
 interface ticketCreateAndEditProps {
   id?: number; // 传递的id
   visible?: boolean; // 弹窗的开关
+  trigger?: any; // 按钮
+  setVisible: any; // 控制开关
 }
 
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
-  const { id, visible = false } = props;
+  const { id, visible = false, trigger, setVisible } = props;
 
   // 等待时间
   const waitTime = (time: number = 100) => {
@@ -36,27 +38,16 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         visible={visible}
         title="新建表单"
         {...formLayoutType}
-        trigger={
-          <Button
-            shape="circle"
-            type="primary"
-            style={{
-              background: '#333333',
-              position: 'sticky',
-              float: 'right',
-              right: 40,
-              bottom: 52,
-            }}
-          >
-            <span style={{ fontSize: 22, lineHeight: '20px' }}>+</span>
-          </Button>
-        }
+        trigger={trigger}
         layout="horizontal"
         autoFocusFirstInput
         modalProps={{
           onCancel: () => console.log('run'),
         }}
         submitTimeout={2000}
+        onVisibleChange={(v) => {
+          setVisible(v);
+        }}
         onFinish={async (values) => {
           await waitTime(2000);
           console.log(values.name);
