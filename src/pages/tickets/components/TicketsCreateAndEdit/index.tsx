@@ -11,6 +11,7 @@ import { Divider, Form, message } from 'antd';
 import React, { useState } from 'react';
 import ConfirmCancel from '../ConfrimCancel';
 import TicketUpload from '../TicketUpload';
+import styles from './index.less';
 
 const formLayoutType = {
   labelCol: { span: 4 },
@@ -55,27 +56,39 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           run({ test: 'test' });
           console.log('提交', v);
         }}
+        className={styles.ticketInput}
       >
         <ProFormText
-          required
-          name="name"
+          name="question"
           label="问题"
-          tooltip="最长为 24 位"
-          placeholder="请输入名称"
+          placeholder="请输入"
+          fieldProps={{
+            maxLength: 70,
+            showCount: true,
+          }}
+          rules={[{ required: true, message: '请输入名称' }]}
         />
-        <ProFormTextArea name="text" label="详细说明" placeholder="请输入..." />
+        <ProFormTextArea
+          name="detail"
+          label="详细说明"
+          fieldProps={{
+            maxLength: 200,
+            showCount: true,
+          }}
+          placeholder="请输入..."
+          rules={[{ required: true, message: '请输入详细说明' }]}
+        />
         <Divider />
-        <ProFormText name="name" label="咨询员工" tooltip="最长为 24 位" placeholder="请输入名称" />
-        <ProFormText name="name" label="所属团队" tooltip="最长为 24 位" placeholder="请输入名称" />
+        <ProFormText name="staff" label="咨询员工" fieldProps={{ value: 'Gates' }} />
+        <ProFormText name="team" label="所属团队" fieldProps={{ value: '北京石景山万达店' }} />
         <ProFormSelect
-          name="select"
+          name="questionSort"
           label="问题分类"
           valueEnum={{
-            open: '未解决',
-            closed: '已解决',
+            holiday: '假期',
           }}
-          placeholder="Please select a country"
-          rules={[{ required: true, message: 'Please select your country!' }]}
+          placeholder="请选择"
+          rules={[{ required: true, message: '请选择问题分类' }]}
         />
         <ProFormDatePicker width={634} name="expirationTime" label="发生时间" />
         {/* <ProFormUploadDragger max={4} label="上传表单" name="dragger" /> */}
