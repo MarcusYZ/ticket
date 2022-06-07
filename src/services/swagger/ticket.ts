@@ -18,3 +18,11 @@ export async function getNearestTicketList(body: API.User, options?: { [key: str
     ...(options || {}),
   });
 }
+
+export async function addTicket(body: any, options?: { [key: string]: any }) {
+  return request<any>('/api/addTicket', {
+    method: 'POST',
+    data: body,
+    ...(options || {}),
+  });
+}

@@ -1,3 +1,5 @@
+import { addTicket } from '@/services/swagger/ticket';
+import useRequest from '@ahooksjs/use-request';
 import {
   ModalForm,
   ProFormDatePicker,
@@ -5,7 +7,7 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { Divider, Form } from 'antd';
+import { Divider, Form, message } from 'antd';
 import React, { useState } from 'react';
 import ConfirmCancel from '../ConfrimCancel';
 import TicketUpload from '../TicketUpload';
@@ -25,6 +27,12 @@ interface ticketCreateAndEditProps {
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const { id, visible = false, trigger, setVisible } = props;
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
+  const { loading, run } = useRequest(addTicket, {
+    manual: true,
+    onSuccess: () => {
+      message.success('新建成功');
+    },
+  });
 
   return (
     <>
@@ -43,11 +51,9 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           console.log('触发', v);
           if (v === false) setConfirmVisible(true);
         }}
-        onFinish={async () => {
-          // await waitTime(2000);
-          // console.log(values.name);
-          // message.success('提交成功');
-          // return true;
+        onFinish={async (v) => {
+          run({ test: 'test' });
+          console.log('提交', v);
         }}
       >
         <ProFormText
