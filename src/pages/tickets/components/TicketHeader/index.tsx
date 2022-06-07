@@ -1,12 +1,7 @@
-import {
-  AppstoreOutlined,
-  BellOutlined,
-  MenuOutlined,
-  SearchOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
+import { AppstoreOutlined, BellOutlined, MenuOutlined, SettingOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Input, Row, Tabs } from 'antd';
 import React from 'react';
+import search_global from '../../../../../public/icons/search.png';
 import styles from './index.less';
 const { TabPane } = Tabs;
 
@@ -18,7 +13,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
   const { navigationListVisible, setNavigationListVisible } = props;
 
   return (
-    <div style={{ height: 100 }}>
+    <div style={{ height: 100 }} className={styles.headerWrapper}>
       <div
         style={{
           position: 'fixed',
@@ -26,13 +21,15 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           background: '#ffffff',
           width: '100%',
           paddingTop: 24,
+          paddingRight: 24,
           zIndex: 999,
         }}
       >
         <Row justify="space-between">
           {/* 控制导航栏展示隐藏 */}
-          <Col>
+          <Col style={{ verticalAlign: 'middle' }}>
             <Button
+              style={{ marginRight: 19 }}
               type="text"
               shape="circle"
               icon={<MenuOutlined />}
@@ -42,7 +39,16 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           </Col>
           {/* 搜索栏 */}
           <Col span={12}>
-            <Input placeholder="Search" prefix={<SearchOutlined />} />
+            <Input
+              placeholder="Search"
+              prefix={
+                <img
+                  src={search_global}
+                  style={{ width: 18, height: 18, marginLeft: 8, marginRight: 6 }}
+                />
+              }
+              style={{ height: 46 }}
+            />
           </Col>
           {/* 头像等按钮 */}
           <Col>
@@ -53,7 +59,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           </Col>
         </Row>
         {/* Tab页 */}
-        <Tabs defaultActiveKey="1" centered style={{ marginBottom: 0 }}>
+        <Tabs defaultActiveKey="1" centered style={{ paddingRight: 24 }}>
           <TabPane tab="待我处理" key="1" />
           <TabPane tab="我发起的" key="2" />
           <TabPane tab="我参与的" key="3" />

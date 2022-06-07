@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import NavigationList from './components/NavigationList';
 import TicketHeader from './components/TicketHeader';
 import TicketList from './components/TicketList';
+import TicketCreateAndEdit from './components/TicketsCreateAndEdit';
 import TopControl from './components/TopControl';
 import { ListType } from './enum';
 import styles from './index.less';
@@ -40,6 +41,7 @@ const Ticket: React.FC = () => {
           {/* 正常 */}
           <TicketList themeType={ListType.NORMAL} />
         </div>
+        <TicketCreateAndEdit />
       </Card>
     </div>
   );
