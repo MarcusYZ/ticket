@@ -21,7 +21,7 @@ const TicketUpload: React.FC = () => {
           </Button>
         </Col>
       </Row>
-      <Upload>
+      <Upload style={{ marginBottom: 40 }}>
         <Button>+ 继续上传</Button>
       </Upload>
     </>

@@ -1,5 +1,6 @@
 import { addTicket } from '@/services/swagger/ticket';
 import useRequest from '@ahooksjs/use-request';
+import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormDatePicker,
@@ -7,9 +8,9 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { AutoComplete, Divider, Form, Input, message } from 'antd';
+import { AutoComplete, Button, Col, Divider, Form, Input, message, Row } from 'antd';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { commonQuestion } from '../../constant';
 import { CommonQuestion } from '../../enum';
 import type { TICKET } from '../../typings';
@@ -35,14 +36,17 @@ const initialValues = {
   questionSort: 'holiday',
   expirationTime: new Date(),
   question: CommonQuestion.ONE,
+  staff: 'Gates',
+  team: '北京石景山万达店',
 };
 
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const { visible = false, trigger, setVisible } = props;
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
   const [questionInputVal, setQuestionInputVal] = useState<string>(''); // 问题的值
+  const formRef = useRef<ProFormInstance>(); // 受控表单
 
-  const { run } = useRequest(addTicket, {
+  const { run, loading } = useRequest(addTicket, {
     manual: true,
     onSuccess: () => {
       message.success('新建成功');
@@ -66,13 +70,21 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   };
 
   // 提交
-  const onFinish = async (fieldsValue: TICKET.TicketForm) => {
-    run(fieldsValue);
+  const onFinish = async () => {
+    const fieldsValue = await formRef.current?.validateFields();
+    await run(fieldsValue);
+    setVisible(false);
+  };
+
+  // 取消
+  const onCancel = () => {
+    setConfirmVisible(true);
   };
 
   return (
     <>
       <ModalForm<TICKET.TicketForm>
+        formRef={formRef}
         visible={visible}
         title="新建表单"
         {...formLayoutType}
@@ -83,7 +95,8 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         onValuesChange={onValuesChange}
         onVisibleChange={onVisibleChange}
         onFinish={onFinish}
-        className={`${styles.ticketInput} ${styles.ticketArea} ${styles.ticketDate} ${styles.formLabel}`}
+        submitter={false}
+        className={`${styles.ticketInput} ${styles.ticketArea} ${styles.ticketDate} ${styles.formLabel} `}
       >
         {/* TODO 不受控 */}
         {/* 名称 */}
@@ -106,9 +119,14 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
 
         <Divider />
         {/* 咨询员工 */}
-        <ProFormText name="staff" label="咨询员工" fieldProps={{ value: 'Gates' }} />
+        <ProFormText name="staff" disabled label="咨询员工" fieldProps={{ value: 'Gates' }} />
         {/* 所属团队 */}
-        <ProFormText name="team" label="所属团队" fieldProps={{ value: '北京石景山万达店' }} />
+        <ProFormText
+          name="team"
+          disabled
+          label="所属团队"
+          fieldProps={{ value: '北京石景山万达店' }}
+        />
         {/* 问题分类 */}
         <ProFormSelect
           name="questionSort"
@@ -129,9 +147,33 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           }}
         />
         {/* <ProFormUploadDragger max={4} label="上传表单" name="dragger" /> */}
-        <Form.Item label="上传菜单">
+        <Form.Item label="上传菜单" style={{ marginBottom: 40 }}>
           <TicketUpload />
         </Form.Item>
+        {/* <div style={{ position: 'absolute', bottom: 30, right: 29 }}> */}
+        <Row justify="end">
+          <Col style={{ marginBottom: 6, marginRight: 5 }}>
+            <Button
+              style={{
+                marginRight: 20,
+                width: 85,
+                height: 30,
+                color: '#00C78B',
+                background: '#FFFFFF',
+              }}
+              onClick={onCancel}
+            >
+              取消
+            </Button>
+            <Button
+              loading={loading}
+              onClick={onFinish}
+              style={{ width: 85, height: 30, color: '#FFFFFF', background: '#00C78B' }}
+            >
+              提交
+            </Button>
+          </Col>
+        </Row>
       </ModalForm>
       {/* 确认取消 */}
       <ConfirmCancel visible={confirmVisible} setVisible={setConfirmVisible} confirm={setVisible} />
