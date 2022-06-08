@@ -1,11 +1,12 @@
-import { getTicketList } from '@/services/swagger/ticket';
+import { deleteTicket, getTicketList } from '@/services/swagger/ticket';
 import { DownOutlined, EllipsisOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Col, Dropdown, List, Menu, Popover, Row } from 'antd';
+import { Avatar, Button, Col, Dropdown, List, Menu, message, Popover, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
+import { more_data } from '../../constant';
 import { ListType } from '../../enum';
-import type { TicketItem } from '../../typings';
+import type { TICKET } from '../../typings';
 import { getPriorityText, getTypeColor } from '../../util';
 import TicketInfoCard from '../TicketInfoCard';
 import UserInfoCard from '../UserInfoCard';
@@ -21,13 +22,29 @@ interface TicketListProps {
 const TicketList: React.FC<TicketListProps> = (props) => {
   const { themeType, setVisible } = props;
   const [list, setList] = useState([]); // 列表
-  const { data, loading } = useRequest(getTicketList);
-  const [handleLoading, setHandleLoading] = useState<boolean>(false);
+  const [handleLoading, setHandleLoading] = useState<boolean>(false); // 让更多在加载中
+
+  // 加载列表
+  const { run, loading } = useRequest(getTicketList, {
+    manual: true,
+    onSuccess: (data) => {
+      setList(data || []);
+    },
+  });
+
+  // 删除表单
+  const { run: deleteTicketRun, loading: deleteTicketLoading } = useRequest(deleteTicket, {
+    manual: true,
+    onSuccess: (data) => {
+      message.success('删除成功');
+      setList(data as any); // TODO
+    },
+  });
 
   // 更新
   useEffect(() => {
-    setList(data || []);
-  }, [data]);
+    run({ level: ListType.DANGER });
+  }, []);
 
   // 等待
   const waitTime = (time: number = 100) => {
@@ -40,7 +57,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
 
   // 加载更多
   const onLoadMore = async () => {
-    const newData = list.concat(data);
+    const newData = list.concat(more_data);
     setHandleLoading(true);
     await waitTime(1000);
     setList(newData);
@@ -48,7 +65,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
   };
 
   // 下拉框
-  const menu = (
+  const menu = (item: TICKET.TicketItem) => (
     <Menu
       items={[
         {
@@ -61,6 +78,10 @@ const TicketList: React.FC<TicketListProps> = (props) => {
         {
           label: '删除',
           key: 'delete',
+          onClick: () => {
+            console.log(item.id, 'id');
+            deleteTicketRun({ id: item.id });
+          },
         },
       ]}
     />
@@ -105,11 +126,11 @@ const TicketList: React.FC<TicketListProps> = (props) => {
       <TitleRender />
       <List
         className="demo-loadmore-list"
-        loading={loading}
+        loading={loading || deleteTicketLoading}
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={list}
-        renderItem={(item: TicketItem) => (
+        renderItem={(item: TICKET.TicketItem) => (
           <List.Item
             style={{
               borderLeft: themeType !== ListType.NORMAL ? '4px solid' : 0,
@@ -147,7 +168,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
                 {item.time}
               </ProCard>
               <ProCard colSpan={2} layout="center" bordered className={styles.listItemCard_common}>
-                <Dropdown overlay={menu}>
+                <Dropdown overlay={menu(item)}>
                   <EllipsisOutlined className={styles.listItemOperate} />
                 </Dropdown>
               </ProCard>

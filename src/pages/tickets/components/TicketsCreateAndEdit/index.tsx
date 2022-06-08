@@ -8,14 +8,14 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { AutoComplete, Button, Col, Divider, Form, Input, message, Row } from 'antd';
+import { AutoComplete, Button, Col, Divider, Form, Input, message, Row, Upload } from 'antd';
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
+import up1 from '../../../../../public/icons/up1.png';
 import { commonQuestion } from '../../constant';
 import { CommonQuestion } from '../../enum';
 import type { TICKET } from '../../typings';
-import ConfirmCancel from '../ConfrimCancel';
-import TicketUpload from '../TicketUpload';
+import ConfirmCancel from '../ConfirmCancel';
 import styles from './index.less';
 
 interface ticketCreateAndEditProps {
@@ -72,7 +72,8 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   // 提交
   const onFinish = async () => {
     const fieldsValue = await formRef.current?.validateFields();
-    await run(fieldsValue);
+    const result = { ...fieldsValue, menu: fieldsValue.menu.fileList };
+    await run(result);
     setVisible(false);
   };
 
@@ -80,6 +81,40 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const onCancel = () => {
     setConfirmVisible(true);
   };
+
+  // 页脚
+  const footerBottomRender = (
+    <Row justify="end">
+      <Col className={styles.footerCol}>
+        <Button className={styles.footerCancel} onClick={onCancel}>
+          取消
+        </Button>
+        <Button loading={loading} onClick={onFinish} className={styles.footerSubmit}>
+          提交
+        </Button>
+      </Col>
+    </Row>
+  );
+
+  // 自定义上传列表
+  const uploadListRender = () => (
+    <Row style={{ marginBottom: 24, position: 'relative', bottom: 10 }}>
+      <Col style={{ height: 80 }}>
+        <img src={up1} alt="" />
+      </Col>
+      <Col>
+        <div style={{ marginLeft: 20 }}>效果.png</div>
+        <p style={{ marginLeft: 20 }}>16MB</p>
+        <Button style={{ padding: 4, marginLeft: 16 }} type="text">
+          删除
+        </Button>
+        <span style={{ position: 'relative', top: -3 }}>.</span>
+        <Button style={{ padding: 4 }} type="text">
+          替换
+        </Button>
+      </Col>
+    </Row>
+  );
 
   return (
     <>
@@ -116,7 +151,6 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           placeholder="请输入..."
           rules={[{ required: true, message: '请输入详细说明' }]}
         />
-
         <Divider />
         {/* 咨询员工 */}
         <ProFormText name="staff" disabled label="咨询员工" fieldProps={{ value: 'Gates' }} />
@@ -146,34 +180,13 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
             format: 'YYYY年MM月DD日 HH:mm',
           }}
         />
-        {/* <ProFormUploadDragger max={4} label="上传表单" name="dragger" /> */}
-        <Form.Item label="上传菜单" style={{ marginBottom: 40 }}>
-          <TicketUpload />
+        <Form.Item label="上传菜单" name="menu">
+          <Upload style={{ marginBottom: 40 }} itemRender={uploadListRender}>
+            <Button style={{ position: 'absolute', bottom: -6 }}>+ 继续上传</Button>
+          </Upload>
         </Form.Item>
-        {/* <div style={{ position: 'absolute', bottom: 30, right: 29 }}> */}
-        <Row justify="end">
-          <Col style={{ marginBottom: 6, marginRight: 5 }}>
-            <Button
-              style={{
-                marginRight: 20,
-                width: 85,
-                height: 30,
-                color: '#00C78B',
-                background: '#FFFFFF',
-              }}
-              onClick={onCancel}
-            >
-              取消
-            </Button>
-            <Button
-              loading={loading}
-              onClick={onFinish}
-              style={{ width: 85, height: 30, color: '#FFFFFF', background: '#00C78B' }}
-            >
-              提交
-            </Button>
-          </Col>
-        </Row>
+        {/* 操作按钮 */}
+        {footerBottomRender}
       </ModalForm>
       {/* 确认取消 */}
       <ConfirmCancel visible={confirmVisible} setVisible={setConfirmVisible} confirm={setVisible} />
