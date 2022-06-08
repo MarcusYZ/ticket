@@ -1,5 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
+import { TICKET } from '@/pages/tickets/typings';
 import { request } from 'umi';
 
 /** Create user This can only be done by the logged in user. POST /user */
@@ -20,7 +21,7 @@ export async function getNearestTicketList(body: API.User, options?: { [key: str
 }
 
 export async function addTicket(body: any, options?: { [key: string]: any }) {
-  return request<any>('/api/addTicket', {
+  return request<TICKET.TicketForm>('/api/addTicket', {
     method: 'POST',
     data: body,
     ...(options || {}),

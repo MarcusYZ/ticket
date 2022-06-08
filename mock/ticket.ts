@@ -87,9 +87,12 @@ const getNearestTicketList = (req: Request, res: Response) => {
 
 // 添加工单
 const addTicket = async (req: Request, res: Response) => {
-  console.log(req.body, 'req');
+  await waitTime(1000);
   ticketList.push(req.body);
-  console.log(ticketList, 'ticketList');
+  res.send({
+    status: 'ok',
+    data: {},
+  });
 };
 
 // 找到对应的项更新数据
