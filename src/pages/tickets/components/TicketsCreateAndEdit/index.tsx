@@ -1,5 +1,6 @@
 import { addTicket, modifyTicket } from '@/services/swagger/ticket';
 import useRequest from '@ahooksjs/use-request';
+import { InboxOutlined } from '@ant-design/icons';
 import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
@@ -17,6 +18,8 @@ import { CommonQuestion } from '../../enum';
 import type { TICKET } from '../../typings';
 import ConfirmCancel from '../ConfirmCancel';
 import styles from './index.less';
+
+const { Dragger } = Upload;
 
 interface ticketCreateAndEditProps {
   id?: number; // 传递的id
@@ -46,7 +49,8 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
   const [questionInputVal, setQuestionInputVal] = useState<string>(''); // 问题的值
   const formRef = useRef<ProFormInstance>(); // 受控表单
-  const [uploadList, setUploadList] = useState<any>(); // 上传列表
+  const [uploadList, setUploadList] = useState<any>([]); // 上传列表 TODO 样式
+
   // 新建
   const { run: addTicketRun, loading: addTicketLoading } = useRequest(addTicket, {
     manual: true,
@@ -95,11 +99,6 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
     formRef.current?.resetFields();
   };
 
-  // 变更上传列表
-  const onChangeUploadList = ({ fileList: newFileList }) => {
-    setUploadList(newFileList);
-  };
-
   // 取消
   const onCancel = () => {
     setConfirmVisible(true);
@@ -123,12 +122,39 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
     </Row>
   );
 
-  // 删除文件
+  // 上传删除
   const onDeleteFile = ({ file, fileList }: { file: any; fileList: any }) => {
-    console.log(file, fileList, '触发');
     const newList = fileList.filter((item: { uid: any }) => item.uid !== file.uid);
     setUploadList(newList);
   };
+
+  // 自定义上传按钮
+  const uploadListButton = (file: any, fileList: { uid: string }[]) => (
+    <>
+      <Button
+        onClick={() => onDeleteFile({ file, fileList })}
+        style={{ padding: 4, marginLeft: 16, fontSize: 14, color: '#FF3B3F' }}
+        type="text"
+      >
+        删除
+      </Button>
+      <span style={{ position: 'relative', top: -3 }}>.</span>
+      <Upload
+        showUploadList={false}
+        onChange={({ file: newFile }) => {
+          const newList = fileList.map((item: { uid: string }) => {
+            if (item.uid === newFile.uid) return newFile;
+            return item;
+          });
+          setUploadList(newList);
+        }}
+      >
+        <Button style={{ padding: 4, fontSize: 14, color: '#23AF8C' }} type="text">
+          替换
+        </Button>
+      </Upload>
+    </>
+  );
 
   // 自定义上传列表
   const uploadListRender = (node: any, file: any, fileList: any) => (
@@ -139,19 +165,26 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
       <Col>
         <div style={{ marginLeft: 20, fontSize: 14, color: '#333333' }}>效果.png</div>
         <p style={{ marginLeft: 20, fontSize: 14, color: '#999999' }}>16MB</p>
-        <Button
-          onClick={() => onDeleteFile(node, file, fileList)}
-          style={{ padding: 4, marginLeft: 16, fontSize: 14, color: '#FF3B3F' }}
-          type="text"
-        >
-          删除
-        </Button>
-        <span style={{ position: 'relative', top: -3 }}>.</span>
-        <Button style={{ padding: 4, fontSize: 14, color: '#23AF8C' }} type="text">
-          替换
-        </Button>
+        {uploadListButton(file, fileList)}
       </Col>
     </Row>
+  );
+
+  // 上传添加
+  const onUploadAdd = ({ file }: any) => {
+    const newList = uploadList.push(file);
+    setUploadList(newList);
+  };
+
+  // 初始化拖拽上传
+  const draggerRender = (
+    <Dragger showUploadList={false} onChange={onUploadAdd}>
+      <p className="ant-upload-drag-icon">
+        <InboxOutlined />
+      </p>
+      <p>点击添加文件</p>
+      <p>文件大小限制100M以内</p>
+    </Dragger>
   );
 
   return (
@@ -219,16 +252,20 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
           }}
         />
         <Form.Item label="附件" name="menu">
-          <Upload
-            style={{ marginBottom: 40 }}
-            itemRender={uploadListRender}
-            fileList={uploadList}
-            onChange={onChangeUploadList}
-          >
-            <Button type="text" style={{ position: 'absolute', bottom: -6, color: '#20BB7A' }}>
-              + 继续上传
-            </Button>
-          </Upload>
+          {uploadList.length === 0 ? (
+            draggerRender
+          ) : (
+            <Upload
+              style={{ marginBottom: 40 }}
+              itemRender={uploadListRender}
+              fileList={uploadList}
+              onChange={onUploadAdd}
+            >
+              <Button type="text" style={{ position: 'absolute', bottom: -6, color: '#20BB7A' }}>
+                + 继续上传
+              </Button>
+            </Upload>
+          )}
         </Form.Item>
         {/* 操作按钮 */}
         {footerBottomRender}

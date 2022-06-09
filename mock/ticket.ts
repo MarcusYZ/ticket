@@ -104,8 +104,8 @@ const addTicket = async (req: Request, res: Response) => {
   const id = ticketList.length + 1;
   await waitTime(1000);
   ticketList.push({
-    ...req.body,
     ...defaultTicketInfo,
+    ...req.body,
     id,
   });
   res.send({
