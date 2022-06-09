@@ -89,13 +89,28 @@ const getNearestTicketList = (req: Request, res: Response) => {
   });
 };
 
+const defaultTicketInfo = {
+  id: 4,
+  avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
+  question: '4号饮水机损坏',
+  status: '待运维补充材料',
+  priority: ListType.NORMAL,
+  date: '2021-04-08 01:18',
+  time: '逾期 3 天 22 小时 44分',
+};
+
 // 添加工单
 const addTicket = async (req: Request, res: Response) => {
+  const id = ticketList.length + 1;
   await waitTime(1000);
-  ticketList.push(req.body);
+  ticketList.push({
+    ...req.body,
+    ...defaultTicketInfo,
+    id,
+  });
   res.send({
     status: 'ok',
-    data: {},
+    data: ticketList,
   });
 };
 
