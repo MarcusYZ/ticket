@@ -1,15 +1,13 @@
 import { deleteTicket, getTicketList } from '@/services/swagger/ticket';
 import { DownOutlined, EllipsisOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Col, Dropdown, List, Menu, message, Popover, Row } from 'antd';
+import { Avatar, Button, Col, Dropdown, List, Menu, message, Row } from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from 'umi';
 import { more_data } from '../../constant';
 import { ListType } from '../../enum';
 import type { TICKET } from '../../typings';
 import { getPriorityText, getTypeColor } from '../../util';
-import TicketInfoCard from '../TicketInfoCard';
-import UserInfoCard from '../UserInfoCard';
 import styles from './index.less';
 import ListHeader from './ListHeader';
 const LEVEL_THREE_NUM = 8;
@@ -19,11 +17,10 @@ interface TicketListProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean | undefined>>; // 控制表单的显隐
   getTicketData: React.Dispatch<React.SetStateAction<TICKET.TicketItem | undefined>>; // 设置表单数据
   setCurrentType: React.Dispatch<React.SetStateAction<ListType | undefined>>; // 当前类型
-  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>; // 设置是否是编辑
 }
 
 const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
-  const { themeType, setVisible, getTicketData, setCurrentType, setIsEdit } = props;
+  const { themeType, setVisible, getTicketData, setCurrentType } = props;
   const [list, setList] = useState<TICKET.TicketItem[]>([]); // 列表
   const [handleLoading, setHandleLoading] = useState<boolean>(false); // 让更多在加载中
 
@@ -90,7 +87,6 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
             setVisible(true);
             getTicketData(item);
             setCurrentType(themeType);
-            setIsEdit(true);
           },
         },
         {
@@ -105,7 +101,7 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
     />
   );
 
-  // title
+  // 标题
   const TitleRender = () => (
     <Row gutter={8} className={styles.title}>
       <Col span={7} />
@@ -138,6 +134,79 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
       </div>
     ) : null;
 
+  // 问题
+  const questionRender = (item: TICKET.TicketItem) => (
+    <ProCard colSpan={7} className={styles.cardText} layout="center" bordered>
+      <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
+      <span style={{ color: '#494949' }}>{item.question}</span>
+    </ProCard>
+  );
+
+  // 状态
+  const statusRender = (item: TICKET.TicketItem) => (
+    <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
+      <FieldTimeOutlined className={styles.listItemIcon} />
+      <span style={{ color: '#494949' }}>{item.status}</span>
+    </ProCard>
+  );
+
+  // 优先级
+  const LevelRender = (item: TICKET.TicketItem) => (
+    <ProCard
+      colSpan={2}
+      layout="center"
+      bordered
+      className={styles.listItemCard_level}
+      style={{
+        background: getTypeColor(item.priority),
+      }}
+    >
+      {getPriorityText(item.priority)}
+    </ProCard>
+  );
+
+  // 发起时间
+  const dateRender = (item: TICKET.TicketItem) => (
+    <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_common}>
+      <span style={{ color: '#494949' }}>{item.date}</span>
+    </ProCard>
+  );
+
+  // 耗时
+  const timeRender = (item: TICKET.TicketItem) => (
+    <ProCard colSpan={5} layout="center" bordered className={styles.listItemCard_common}>
+      <span style={{ color: '#494949' }}>{item.time}</span>
+    </ProCard>
+  );
+
+  // 操作
+  const operateRender = (item: TICKET.TicketItem) => (
+    <ProCard colSpan={2} layout="center" bordered className={styles.listItemCard_common}>
+      <Dropdown overlay={menu(item)}>
+        <EllipsisOutlined className={styles.listItemOperate} />
+      </Dropdown>
+    </ProCard>
+  );
+
+  const listItem = (item: TICKET.TicketItem) => (
+    <List.Item
+      style={{
+        borderLeft: themeType !== ListType.NORMAL ? '4px solid' : 0,
+        borderLeftColor: getTypeColor(themeType),
+      }}
+      className={styles.listItem}
+    >
+      <ProCard ghost gutter={8}>
+        {questionRender(item)}
+        {statusRender(item)}
+        {LevelRender(item)}
+        {dateRender(item)}
+        {timeRender(item)}
+        {operateRender(item)}
+      </ProCard>
+    </List.Item>
+  );
+
   return (
     <div className={styles.listWrapper}>
       <ListHeader num={LEVEL_THREE_NUM} type={themeType} />
@@ -148,51 +217,7 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={list}
-        renderItem={(item: TICKET.TicketItem) => (
-          <List.Item
-            style={{
-              borderLeft: themeType !== ListType.NORMAL ? '4px solid' : 0,
-              borderLeftColor: getTypeColor(themeType),
-            }}
-            className={styles.listItem}
-          >
-            <ProCard ghost gutter={8}>
-              <ProCard colSpan={7} className={styles.cardText} layout="center" bordered>
-                <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
-                  <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
-                </Popover>
-                <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
-                  {item.question}
-                </Popover>
-              </ProCard>
-              <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
-                <FieldTimeOutlined className={styles.listItemIcon} /> {item.status}
-              </ProCard>
-              <ProCard
-                colSpan={2}
-                layout="center"
-                bordered
-                className={styles.listItemCard_level}
-                style={{
-                  background: getTypeColor(item.priority),
-                }}
-              >
-                {getPriorityText(item.priority)}
-              </ProCard>
-              <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_common}>
-                {item.date}
-              </ProCard>
-              <ProCard colSpan={5} layout="center" bordered className={styles.listItemCard_common}>
-                {item.time}
-              </ProCard>
-              <ProCard colSpan={2} layout="center" bordered className={styles.listItemCard_common}>
-                <Dropdown overlay={menu(item)}>
-                  <EllipsisOutlined className={styles.listItemOperate} />
-                </Dropdown>
-              </ProCard>
-            </ProCard>
-          </List.Item>
-        )}
+        renderItem={listItem}
       />
     </div>
   );

@@ -11,10 +11,22 @@
 .listWrapper {
   margin-bottom: 64px;
   padding: 0 40px;
+  :global(.ant-list-split .ant-list-item) {
+    border-bottom: 0;
+  }
+  :global(.ant-list-split.ant-list-something-after-last-item
+      .ant-spin-container
+      > .ant-list-items
+      > .ant-list-item:last-child) {
+    border-bottom: 0;
+  }
+  :global(.ant-pro-card-border) {
+    border: 0;
+  }
 }
 
 .listItem {
-  height: 82px;
+  height: 56px;
   margin-bottom: 4px;
   padding: 0;
   border-bottom: 0;
@@ -23,22 +35,23 @@
 
 .listItemAvatar {
   margin-right: 12px;
+  margin-left: 20px;
 }
 
 .listItemCard_status {
   justify-content: center;
-  height: 82px;
+  height: 56px;
   background-color: #fafafa;
 }
 
 .listItemCard_level {
   justify-content: center;
-  height: 82px;
+  height: 56px;
   color: #f9f8f8;
 }
 
 .listItemCard_common {
-  height: 82px;
+  height: 56px;
   background-color: #fafafa;
 }
 
@@ -51,9 +64,13 @@
 }
 
 .cardText {
+  height: 100%;
   background-color: #fafafa;
   :global(.ant-pro-card-body-center) {
     justify-content: left;
+  }
+  :global(.ant-pro-card-body) {
+    padding: 0;
   }
 }
 
@@ -70,6 +87,8 @@
 }
 
 .moreButton {
+  background-color: #fafafa;
+  border: 0;
   border-radius: 15px;
 }
 
@@ -79,3 +98,13 @@
   line-height: 32px;
   text-align: right;
 }
+
+// <div>
+// <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
+// <span>系统界面一片混乱</span>
+// </div>
+// <div>待运维补充材料</div>
+// <div>紧急</div>
+// <div>2021-04-08 01:18</div>
+// <div>逾期 3 天 22 小时 24 分</div>
+// <div>...</div>
