@@ -2,7 +2,7 @@ import { deleteTicket, getTicketList } from '@/services/swagger/ticket';
 import { DownOutlined, EllipsisOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { Avatar, Button, Col, Dropdown, List, Menu, message, Popover, Row } from 'antd';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from 'umi';
 import { more_data } from '../../constant';
 import { ListType } from '../../enum';
@@ -16,11 +16,12 @@ const LEVEL_THREE_NUM = 8;
 
 interface TicketListProps {
   themeType: API.ListType; // 颜色
-  setVisible: any; // 控制表单的显隐
+  setVisible: React.Dispatch<React.SetStateAction<boolean | undefined>>; // 控制表单的显隐
+  setId: React.Dispatch<React.SetStateAction<number | undefined>>; // 设置Id
 }
 
-const TicketList: React.FC<TicketListProps> = (props) => {
-  const { themeType, setVisible } = props;
+const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
+  const { themeType, setVisible, setId } = props;
   const [list, setList] = useState([]); // 列表
   const [handleLoading, setHandleLoading] = useState<boolean>(false); // 让更多在加载中
 
@@ -31,6 +32,10 @@ const TicketList: React.FC<TicketListProps> = (props) => {
       setList(data || []);
     },
   });
+
+  useImperativeHandle(ref, () => ({
+    run,
+  }));
 
   // 删除表单
   const { run: deleteTicketRun, loading: deleteTicketLoading } = useRequest(deleteTicket, {
@@ -73,6 +78,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
           key: 'edit',
           onClick: () => {
             setVisible(true);
+            setId(item.id);
           },
         },
         {
@@ -144,7 +150,7 @@ const TicketList: React.FC<TicketListProps> = (props) => {
                   <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
                 </Popover>
                 <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
-                  {item.info}
+                  {item.question}
                 </Popover>
               </ProCard>
               <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
@@ -178,6 +184,6 @@ const TicketList: React.FC<TicketListProps> = (props) => {
       />
     </div>
   );
-};
+});
 
 export default TicketList;

@@ -20,7 +20,7 @@ let ticketList = [
   {
     id: 1,
     avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
-    info: '1号咖啡机损坏',
+    question: '1号咖啡机损坏',
     status: '待运维处理',
     priority: ListType.DANGER,
     date: '2021-04-08 01:18',
@@ -29,7 +29,7 @@ let ticketList = [
   {
     id: 2,
     avatarUrl: 'https://randomuser.me/api/portraits/women/82.jpg',
-    info: '2号咖啡机损坏',
+    question: '2号咖啡机损坏',
     status: '待运维处理',
     priority: ListType.WARN,
     date: '2021-04-08 01:18',
@@ -38,7 +38,7 @@ let ticketList = [
   {
     id: 3,
     avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
-    info: '3号饮水机损坏',
+    question: '3号饮水机损坏',
     status: '待运维处理',
     priority: ListType.COMMON,
     date: '2021-04-08 01:18',
@@ -47,7 +47,7 @@ let ticketList = [
   {
     id: 4,
     avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
-    info: '4号饮水机损坏',
+    question: '4号饮水机损坏',
     status: '待运维补充材料',
     priority: ListType.NORMAL,
     date: '2021-04-08 01:18',
@@ -67,23 +67,23 @@ const getNearestTicketList = (req: Request, res: Response) => {
     data: [
       {
         avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
-        info: '1号咖啡机损坏',
+        question: '1号咖啡机损坏',
       },
       {
         avatarUrl: 'https://randomuser.me/api/portraits/women/82.jpg',
-        info: '2号咖啡机损坏',
+        question: '2号咖啡机损坏',
       },
       {
         avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
-        info: '3号饮水机损坏',
+        question: '3号饮水机损坏',
       },
       {
         avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
-        info: '4号饮水机损坏',
+        question: '4号饮水机损坏',
       },
       {
         avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
-        info: '5号饮水机损坏',
+        question: '5号饮水机损坏',
       },
     ],
   });
@@ -101,7 +101,18 @@ const addTicket = async (req: Request, res: Response) => {
 
 // 找到对应的项更新数据
 const modifyTicket = async (req: Request, res: Response) => {
-  console.log(req.body, 'req');
+  await waitTime(1000);
+  const { id } = req.body;
+  ticketList = ticketList.map((item) => {
+    if (item.id === id) {
+      return { ...item, ...req.body };
+    }
+    return item;
+  });
+  res.send({
+    status: 'ok',
+    data: ticketList,
+  });
 };
 
 // 找到对应的项进行删除
@@ -120,6 +131,6 @@ export default {
   'GET /api/ticketList': getTicketList,
   'GET /api/nearestTicketList': getNearestTicketList,
   'POST /api/addTicket': addTicket,
-  'POST /api/modify': modifyTicket,
+  'POST /api/modifyTicket': modifyTicket,
   'DELETE /api/deleteTicket': deleteTicket,
 };

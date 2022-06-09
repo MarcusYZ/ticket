@@ -4,7 +4,7 @@ import type { default as ListType, default as QuestionType } from './enum';
 declare namespace TICKET {
   type TicketItem = {
     id: number; // 编号
-    info: string; // 信息
+    question: string; // 信息
     avatarUrl: string; // 头像地址
     status: string; // 状态
     priority: ListType; // 优先级s

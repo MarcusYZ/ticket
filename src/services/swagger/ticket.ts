@@ -3,7 +3,7 @@
 import { TICKET } from '@/pages/tickets/typings';
 import { request } from 'umi';
 
-/** Create user This can only be done by the logged in user. POST /user */
+// 获取工单列表
 export async function getTicketList(body: TICKET.TicketParams, options?: { [key: string]: any }) {
   return request<any>('/api/ticketList', {
     method: 'GET',
@@ -12,6 +12,7 @@ export async function getTicketList(body: TICKET.TicketParams, options?: { [key:
   });
 }
 
+// 获取近期工单
 export async function getNearestTicketList(body: API.User, options?: { [key: string]: any }) {
   return request<any>('/api/nearestTicketList', {
     method: 'GET',
@@ -20,6 +21,7 @@ export async function getNearestTicketList(body: API.User, options?: { [key: str
   });
 }
 
+// 添加工单
 export async function addTicket(body: any, options?: { [key: string]: any }) {
   return request<TICKET.TicketForm>('/api/addTicket', {
     method: 'POST',
@@ -28,9 +30,19 @@ export async function addTicket(body: any, options?: { [key: string]: any }) {
   });
 }
 
+// 删除工单
 export async function deleteTicket(body: { id: number }, options?: { [key: string]: any }) {
   return request<TICKET.TicketForm>('/api/deleteTicket', {
     method: 'DELETE',
+    data: body,
+    ...(options || {}),
+  });
+}
+
+// 修改工单
+export async function modifyTicket(body: any, options?: { [key: string]: any }) {
+  return request<TICKET.TicketForm>('/api/modifyTicket', {
+    method: 'POST',
     data: body,
     ...(options || {}),
   });

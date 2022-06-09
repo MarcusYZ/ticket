@@ -1,5 +1,5 @@
 import { Button, Card } from 'antd';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import NavigationList from './components/NavigationList';
 import TicketHeader from './components/TicketHeader';
 import TicketList from './components/TicketList';
@@ -10,11 +10,17 @@ import styles from './index.less';
 
 const Ticket: React.FC = () => {
   const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false); // 左侧导航栏显隐
-  const [createFormVisible, setCreateFormVisible] = useState<boolean>();
+  const [createAndEditFormVisible, setCreateAndEditFormVisible] = useState<boolean>();
+  const [id, setId] = useState<number>(); // 列表id
+  const ref = useRef();
+
+  const updateList = () => {
+    if (ref.current && ref.current.run) ref.current.run(); // TODO run的类型
+  };
 
   const createButton = () => (
     <Button
-      onClick={() => setCreateFormVisible(true)}
+      onClick={() => setCreateAndEditFormVisible(true)}
       shape="circle"
       type="primary"
       style={{
@@ -51,18 +57,37 @@ const Ticket: React.FC = () => {
           {/* 顶部控制项 */}
           <TopControl />
           {/* level3 */}
-          <TicketList themeType={ListType.DANGER} setVisible={setCreateFormVisible} />
+          <TicketList
+            ref={ref}
+            themeType={ListType.DANGER}
+            setVisible={setCreateAndEditFormVisible}
+            setId={setId}
+          />
           {/* level2 */}
-          <TicketList themeType={ListType.WARN} setVisible={setCreateFormVisible} />
+          <TicketList
+            themeType={ListType.WARN}
+            setVisible={setCreateAndEditFormVisible}
+            setId={setId}
+          />
           {/* level1 */}
-          <TicketList themeType={ListType.COMMON} setVisible={setCreateFormVisible} />
+          <TicketList
+            themeType={ListType.COMMON}
+            setVisible={setCreateAndEditFormVisible}
+            setId={setId}
+          />
           {/* 正常 */}
-          <TicketList themeType={ListType.NORMAL} setVisible={setCreateFormVisible} />
+          <TicketList
+            themeType={ListType.NORMAL}
+            setVisible={setCreateAndEditFormVisible}
+            setId={setId}
+          />
         </div>
         <TicketCreateAndEdit
-          visible={createFormVisible}
-          setVisible={setCreateFormVisible}
+          visible={createAndEditFormVisible}
+          setVisible={setCreateAndEditFormVisible}
           trigger={createButton()}
+          id={id}
+          updateList={updateList}
         />
       </Card>
     </div>

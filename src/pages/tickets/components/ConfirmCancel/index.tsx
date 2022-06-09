@@ -15,7 +15,7 @@ const ConfirmCancel: React.FC<ConfirmCancelProps> = (props) => {
       visible={visible}
       onCancel={() => setVisible(false)}
       onOk={() => {
-        confirm(false);
+        confirm();
         setVisible(false);
       }}
     >

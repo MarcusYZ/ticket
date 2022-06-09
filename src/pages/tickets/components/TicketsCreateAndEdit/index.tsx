@@ -1,4 +1,4 @@
-import { addTicket } from '@/services/swagger/ticket';
+import { addTicket, modifyTicket } from '@/services/swagger/ticket';
 import useRequest from '@ahooksjs/use-request';
 import type { ProFormInstance } from '@ant-design/pro-components';
 import {
@@ -23,6 +23,7 @@ interface ticketCreateAndEditProps {
   visible?: boolean; // 弹窗的开关
   trigger?: any; // 按钮
   setVisible: any; // 控制开关
+  updateList: any; // 更新列表
 }
 
 // 表单布局
@@ -41,16 +42,26 @@ const initialValues = {
 };
 
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
-  const { visible = false, trigger, setVisible } = props;
+  const { id, visible = false, trigger, setVisible, updateList } = props;
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
   const [questionInputVal, setQuestionInputVal] = useState<string>(''); // 问题的值
   const formRef = useRef<ProFormInstance>(); // 受控表单
-
-  const { run, loading } = useRequest(addTicket, {
+  const [uploadList, setUploadList] = useState<any>(); // 上传列表
+  // 新建
+  const { run: addTicketRun, loading: addTicketLoading } = useRequest(addTicket, {
     manual: true,
     onSuccess: () => {
       message.success('新建成功');
-      setVisible(false);
+      updateList();
+    },
+  });
+
+  // 更新
+  const { run: modifyTicketRun, loading: modifyTicketLoading } = useRequest(modifyTicket, {
+    manual: true,
+    onSuccess: () => {
+      message.success('编辑成功');
+      updateList();
     },
   });
 
@@ -58,23 +69,35 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
   const onValuesChange = (fieldsValue: TICKET.TicketForm) => {
     console.log(fieldsValue, 'fieldsValue');
     const { question } = fieldsValue;
-    console.log(questionInputVal, 'questionInputVal');
     if (question && question.length <= 70) setQuestionInputVal(question);
   };
 
   // 改变状态
   const onVisibleChange = (v: boolean) => {
-    // 当取消并且当前数据为空时 TODO
-    console.log('触发', v);
     if (v === false) setConfirmVisible(true);
   };
 
-  // 提交
+  // 提交按钮
   const onFinish = async () => {
     const fieldsValue = await formRef.current?.validateFields();
-    const result = { ...fieldsValue, menu: fieldsValue.menu.fileList };
-    await run(result);
+    if (id === undefined) {
+      const result = { ...fieldsValue, menu: fieldsValue.menu ? fieldsValue.menu.fileList : [] };
+      await addTicketRun(result);
+    } else {
+      const result = {
+        ...fieldsValue,
+        menu: fieldsValue.menu ? fieldsValue.menu.fileList : [],
+        id,
+      };
+      await modifyTicketRun(result);
+    }
     setVisible(false);
+    formRef.current?.resetFields();
+  };
+
+  // 变更上传列表
+  const onChangeUploadList = ({ fileList: newFileList }) => {
+    setUploadList(newFileList);
   };
 
   // 取消
@@ -89,27 +112,42 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         <Button className={styles.footerCancel} onClick={onCancel}>
           取消
         </Button>
-        <Button loading={loading} onClick={onFinish} className={styles.footerSubmit}>
+        <Button
+          loading={addTicketLoading || modifyTicketLoading}
+          onClick={onFinish}
+          className={styles.footerSubmit}
+        >
           提交
         </Button>
       </Col>
     </Row>
   );
 
+  // 删除文件
+  const onDeleteFile = ({ file, fileList }: { file: any; fileList: any }) => {
+    console.log(file, fileList, '触发');
+    const newList = fileList.filter((item: { uid: any }) => item.uid !== file.uid);
+    setUploadList(newList);
+  };
+
   // 自定义上传列表
-  const uploadListRender = () => (
+  const uploadListRender = (node: any, file: any, fileList: any) => (
     <Row style={{ marginBottom: 24, position: 'relative', bottom: 10 }}>
       <Col style={{ height: 80 }}>
-        <img src={up1} alt="" />
+        <img src={up1} alt="" style={{ height: 80 }} />
       </Col>
       <Col>
-        <div style={{ marginLeft: 20 }}>效果.png</div>
-        <p style={{ marginLeft: 20 }}>16MB</p>
-        <Button style={{ padding: 4, marginLeft: 16 }} type="text">
+        <div style={{ marginLeft: 20, fontSize: 14, color: '#333333' }}>效果.png</div>
+        <p style={{ marginLeft: 20, fontSize: 14, color: '#999999' }}>16MB</p>
+        <Button
+          onClick={() => onDeleteFile(node, file, fileList)}
+          style={{ padding: 4, marginLeft: 16, fontSize: 14, color: '#FF3B3F' }}
+          type="text"
+        >
           删除
         </Button>
         <span style={{ position: 'relative', top: -3 }}>.</span>
-        <Button style={{ padding: 4 }} type="text">
+        <Button style={{ padding: 4, fontSize: 14, color: '#23AF8C' }} type="text">
           替换
         </Button>
       </Col>
@@ -121,7 +159,7 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
       <ModalForm<TICKET.TicketForm>
         formRef={formRef}
         visible={visible}
-        title="新建表单"
+        title={`${id ? '编辑' : '新建'}表单`}
         {...formLayoutType}
         trigger={trigger}
         layout="horizontal"
@@ -180,16 +218,30 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
             format: 'YYYY年MM月DD日 HH:mm',
           }}
         />
-        <Form.Item label="上传菜单" name="menu">
-          <Upload style={{ marginBottom: 40 }} itemRender={uploadListRender}>
-            <Button style={{ position: 'absolute', bottom: -6 }}>+ 继续上传</Button>
+        <Form.Item label="附件" name="menu">
+          <Upload
+            style={{ marginBottom: 40 }}
+            itemRender={uploadListRender}
+            fileList={uploadList}
+            onChange={onChangeUploadList}
+          >
+            <Button type="text" style={{ position: 'absolute', bottom: -6, color: '#20BB7A' }}>
+              + 继续上传
+            </Button>
           </Upload>
         </Form.Item>
         {/* 操作按钮 */}
         {footerBottomRender}
       </ModalForm>
       {/* 确认取消 */}
-      <ConfirmCancel visible={confirmVisible} setVisible={setConfirmVisible} confirm={setVisible} />
+      <ConfirmCancel
+        visible={confirmVisible}
+        setVisible={setConfirmVisible}
+        confirm={() => {
+          setVisible(false);
+          formRef.current?.resetFields();
+        }}
+      />
     </>
   );
 };
