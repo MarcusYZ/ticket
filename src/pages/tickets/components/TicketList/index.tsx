@@ -1,7 +1,7 @@
 import { deleteTicket, getTicketList } from '@/services/swagger/ticket';
 import { DownOutlined, EllipsisOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Col, Dropdown, List, Menu, message, Row } from 'antd';
+import { Avatar, Col, Dropdown, List, Menu, message, Row, Spin } from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from 'umi';
 import { more_data } from '../../constant';
@@ -126,12 +126,14 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
   // 加载按钮
   const loadMore =
     list.length < LEVEL_THREE_NUM ? (
-      <div className={styles.moreButtonWrapper}>
-        <Button loading={handleLoading} className={styles.moreButton} onClick={onLoadMore}>
-          <DownOutlined />
+      <Spin spinning={handleLoading}>
+        <div className={styles.moreButton} onClick={onLoadMore}>
+          {/* <Button  className={styles.moreButton} onClick={onLoadMore}> */}
+          <DownOutlined style={{ width: 9, height: 5, marginRight: 8 }} />
           还有4条
-        </Button>
-      </div>
+          {/* </Button> */}
+        </div>
+      </Spin>
     ) : null;
 
   // 问题

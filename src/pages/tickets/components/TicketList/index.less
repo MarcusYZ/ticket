@@ -9,7 +9,7 @@
 }
 
 .listWrapper {
-  margin-bottom: 64px;
+  margin-bottom: 76px;
   padding: 0 40px;
   :global(.ant-list-split .ant-list-item) {
     border-bottom: 0;
@@ -87,17 +87,26 @@
 }
 
 .moreButton {
-  background-color: #fafafa;
-  border: 0;
+  align-items: center;
+  float: right;
+  width: 107px;
+  height: 28px;
+  margin-top: 12px;
+  line-height: 28px;
+  text-align: center;
+  background: #fafafa;
   border-radius: 15px;
+  cursor: pointer;
+  :global(.anticon svg) {
+    width: 12px;
+  }
 }
 
-.moreButtonWrapper {
-  height: 32px;
-  margin-top: 12px;
-  line-height: 32px;
-  text-align: right;
-}
+// .moreButtonWrapper {
+//   height: 32px;
+//   line-height: 32px;
+//   text-align: right;
+// }
 
 // <div>
 // <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
