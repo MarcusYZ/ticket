@@ -1,4 +1,5 @@
 .recentTicket {
+  margin-bottom: 5px;
   margin-left: 23px;
   color: grey;
   font-weight: 400;
@@ -8,13 +9,19 @@
 }
 
 .menuItem {
+  :global(.ant-menu-item) {
+    color: #999998;
+  }
   :global(.ant-menu-inline .ant-menu-item-selected::after) {
     transform: none;
     opacity: 0;
   }
   :global(.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected) {
-    color: #757575;
-    background-color: #e9e9e9;
+    color: #494949;
+    background-color: #fffffe;
+  }
+  :global(.ant-menu-item-active) {
+    background-color: #fffffe;
   }
 }
 
@@ -25,7 +32,9 @@
 .navigationWrapper {
   position: fixed;
   top: 173px;
-  width: 200;
+  :global(.ant-divider-horizontal) {
+    margin-bottom: 18px;
+  }
 }
 
 .navigationMenu {
@@ -37,10 +46,14 @@
   cursor: pointer;
 }
 
-.sceneAvatar {
+.sceneLeft {
   width: 20px;
   height: 20px;
   margin: 0 21px 0 25px;
+}
+
+.sceneLeftMore {
+  height: 13px;
 }
 
 .sceneText {
@@ -49,4 +62,16 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.nearListTicketItem {
+  :global(.ant-list-item) {
+    margin-bottom: 5px;
+  }
+}
+
+.nearListTicketButton {
+  :global(.ant-list-item) {
+    padding: 12px 0 0 0;
+  }
 }

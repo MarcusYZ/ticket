@@ -1,6 +1,11 @@
 import { getNearestTicketList } from '@/services/swagger/ticket';
-import { DownOutlined, ExclamationCircleFilled, IdcardOutlined } from '@ant-design/icons';
-import { Avatar, Button, Divider, List, Menu } from 'antd';
+import {
+  DownOutlined,
+  ExclamationCircleFilled,
+  IdcardOutlined,
+  UpOutlined,
+} from '@ant-design/icons';
+import { Avatar, Divider, List, Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import type { TICKET } from '../../typings';
@@ -8,7 +13,7 @@ import styles from './index.less';
 
 const NavigationList: React.FC = () => {
   const { data } = useRequest(getNearestTicketList); // 获取近期工单
-  const [currentTicketsData, setCurrentTicketsData] = useState<TICKET.TicketItem[]>(data); // 控制近期工单的展示
+  const [currentTicketsData, setCurrentTicketsData] = useState<TICKET.TicketItem[]>(data || []); // 控制近期工单的展示
 
   useEffect(() => {
     if (data) setCurrentTicketsData([...data].splice(0, 4));
@@ -56,27 +61,35 @@ const NavigationList: React.FC = () => {
 
   // 更多按钮
   const moreButton = (
-    <List.Item>
-      <Button type="text" onClick={() => setCurrentTicketsData(data)} className={styles.moreButton}>
-        <DownOutlined />
-        更多
-      </Button>
+    <List.Item onClick={() => setCurrentTicketsData(data)}>
+      {/* <Button type="text" onClick={() => setCurrentTicketsData(data)} className={styles.moreButton}> */}
+      <DownOutlined className={`${styles.sceneLeftMore} ${styles.sceneLeft}`} />
+      <h4 className={styles.sceneText}>更多</h4>
+      {/* </Button> */}
     </List.Item>
   );
 
+  // 收起按钮
+  const stowButton = (
+    <List.Item onClick={() => setCurrentTicketsData([...data].splice(0, 4))}>
+      <UpOutlined className={`${styles.sceneLeftMore} ${styles.sceneLeft}`} />
+      <h4 className={styles.sceneText}>收起</h4>
+    </List.Item>
+  );
+
+  const ButtonRender = currentTicketsData.length === 4 ? moreButton : stowButton;
+
   // 自定义列表项
   const renderItem = (item: TICKET.TicketItem, index: number) => (
-    <>
+    <div className={styles.nearListTicketItem}>
       <List.Item>
-        <Avatar src={item.avatarUrl} className={styles.sceneAvatar} />
+        <Avatar src={item.avatarUrl} className={styles.sceneLeft} />
         <h4 className={styles.sceneText}>{item.question}</h4>
       </List.Item>
-      {index < data.length - 1 &&
-      index === currentTicketsData.length - 1 &&
-      currentTicketsData.length !== 0
-        ? moreButton
-        : null}
-    </>
+      <div className={styles.nearListTicketButton}>
+        {index === currentTicketsData.length - 1 && data.length > 4 ? ButtonRender : null}
+      </div>
+    </div>
   );
 
   return (

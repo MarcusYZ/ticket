@@ -31,7 +31,14 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           <Col style={{ verticalAlign: 'middle' }}>
             <MenuOutlined
               onClick={() => setNavigationListVisible(!navigationListVisible)}
-              className={styles.headerControlIcon}
+              style={{
+                height: 16,
+                lineHeight: '16px',
+                marginLeft: 24,
+                marginRight: 23,
+                position: 'relative',
+                bottom: 2,
+              }}
             />
             <span className={styles.headerTitleText}>Tickets</span>
           </Col>
@@ -51,7 +58,10 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           </Col>
         </Row>
         {/* Tab页 */}
-        <div className={`${styles.tabTitle} ${styles.tabShadow}`}>
+        <div
+          className={`${styles.tabTitle} ${styles.tabShadow}`}
+          style={{ boxShadow: '0 5px 6px -3px rgb(0 0 0 / 15%)' }}
+        >
           <Tabs defaultActiveKey="1" centered>
             <TabPane tab="待我处理" key="1" />
             <TabPane tab="我发起的" key="2" />
