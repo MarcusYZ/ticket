@@ -31,7 +31,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
           <Col style={{ verticalAlign: 'middle' }}>
             <MenuOutlined
               onClick={() => setNavigationListVisible(!navigationListVisible)}
-              style={{ height: 16, lineHeight: '16px', marginLeft: 24, marginRight: 23 }}
+              className={styles.headerControlIcon}
             />
             <span className={styles.headerTitleText}>Tickets</span>
           </Col>

@@ -3,12 +3,12 @@ import { DownOutlined, ExclamationCircleFilled, IdcardOutlined } from '@ant-desi
 import { Avatar, Button, Divider, List, Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
-import type { TicketItem } from '../../typings';
+import type { TICKET } from '../../typings';
 import styles from './index.less';
 
 const NavigationList: React.FC = () => {
   const { data } = useRequest(getNearestTicketList); // 获取近期工单
-  const [currentTicketsData, setCurrentTicketsData] = useState<TicketItem[]>(data); // 控制近期工单的展示
+  const [currentTicketsData, setCurrentTicketsData] = useState<TICKET.TicketItem[]>(data); // 控制近期工单的展示
 
   useEffect(() => {
     if (data) setCurrentTicketsData([...data].splice(0, 4));
@@ -65,11 +65,11 @@ const NavigationList: React.FC = () => {
   );
 
   // 自定义列表项
-  const renderItem = (item: TicketItem, index: number) => (
+  const renderItem = (item: TICKET.TicketItem, index: number) => (
     <>
       <List.Item>
         <Avatar src={item.avatarUrl} className={styles.sceneAvatar} />
-        <h4 className={styles.sceneText}>{item.info}</h4>
+        <h4 className={styles.sceneText}>{item.question}</h4>
       </List.Item>
       {index < data.length - 1 &&
       index === currentTicketsData.length - 1 &&
