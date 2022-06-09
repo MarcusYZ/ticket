@@ -25,10 +25,22 @@
   :global(.ant-input-affix-wrapper > input.ant-input) {
     background: #f7f7f7;
   }
+  :global(.ant-input-affix-wrapper-focused) {
+    border: none;
+    box-shadow: none;
+  }
+  :global(.ant-input-affix-wrapper:focus) {
+    border: none;
+    box-shadow: none;
+  }
 }
 
 .headerInput {
   height: 46px;
+  color: #b0b0b0;
+  font-weight: 400;
+  font-size: 13px;
+  font-family: DIN-Regular, DIN;
   background: #f7f7f7;
 }
 
@@ -47,4 +59,22 @@
 .iconConfig {
   width: 24px;
   margin-right: 30px;
+}
+
+.tabTitle {
+  :global(.ant-tabs-tab) {
+    padding: 21px 30px 13px 30px;
+    color: #999998;
+    font-size: 15px;
+  }
+  :global(.ant-tabs-tab + .ant-tabs-tab) {
+    margin: 0 0 0 30px;
+  }
+  :global(.ant-tabs-tab-active) {
+    color: #494949;
+  }
+}
+
+.tabShadow {
+  box-shadow: 0 5px 6px -3px rgb(0 0 0 / 15%);
 }
