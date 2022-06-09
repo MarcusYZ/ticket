@@ -22,11 +22,11 @@ import styles from './index.less';
 const { Dragger } = Upload;
 
 interface ticketCreateAndEditProps {
-  id?: number; // 传递的id
   visible?: boolean; // 弹窗的开关
   trigger?: any; // 按钮
   setVisible: any; // 控制开关
   updateList: any; // 更新列表
+  data?: TICKET.TicketItem; // 表格数据
 }
 
 // 表单布局
@@ -45,7 +45,7 @@ const initialValues = {
 };
 
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
-  const { id, visible = false, trigger, setVisible, updateList } = props;
+  const { visible = false, trigger, setVisible, updateList, data } = props;
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
   const [questionInputVal, setQuestionInputVal] = useState<string>(''); // 问题的值
   const formRef = useRef<ProFormInstance>(); // 受控表单
@@ -78,25 +78,32 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
 
   // 改变状态
   const onVisibleChange = (v: boolean) => {
+    console.log(v, data, 'data');
+    if (data) formRef.current?.setFieldsValue(data);
     if (v === false) setConfirmVisible(true);
   };
 
   // 提交按钮
   const onFinish = async () => {
     const fieldsValue = await formRef.current?.validateFields();
-    if (id === undefined) {
+    if (data === undefined) {
       const result = { ...fieldsValue, menu: fieldsValue.menu ? fieldsValue.menu.fileList : [] };
       await addTicketRun(result);
     } else {
       const result = {
         ...fieldsValue,
         menu: fieldsValue.menu ? fieldsValue.menu.fileList : [],
-        id,
+        id: data.id,
       };
       await modifyTicketRun(result);
     }
     setVisible(false);
     formRef.current?.resetFields();
+  };
+
+  // 更新上传列表
+  const onChangeUploadList = ({ fileList: newFileList }: any) => {
+    setUploadList(newFileList);
   };
 
   // 取消
@@ -122,7 +129,7 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
     </Row>
   );
 
-  // 上传删除
+  // 删除文件
   const onDeleteFile = ({ file, fileList }: { file: any; fileList: any }) => {
     const newList = fileList.filter((item: { uid: any }) => item.uid !== file.uid);
     setUploadList(newList);
@@ -170,15 +177,9 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
     </Row>
   );
 
-  // 上传添加
-  const onUploadAdd = ({ file }: any) => {
-    const newList = uploadList.push(file);
-    setUploadList(newList);
-  };
-
   // 初始化拖拽上传
   const draggerRender = (
-    <Dragger showUploadList={false} onChange={onUploadAdd}>
+    <Dragger showUploadList={false} onChange={onChangeUploadList}>
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>
@@ -192,7 +193,7 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
       <ModalForm<TICKET.TicketForm>
         formRef={formRef}
         visible={visible}
-        title={`${id ? '编辑' : '新建'}表单`}
+        title={`${data ? '编辑' : '新建'}表单`}
         {...formLayoutType}
         trigger={trigger}
         layout="horizontal"
@@ -204,8 +205,7 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
         submitter={false}
         className={`${styles.ticketInput} ${styles.ticketArea} ${styles.ticketDate} ${styles.formLabel} `}
       >
-        {/* TODO 不受控 */}
-        {/* 名称 */}
+        {/* 名称 TODO 不受控 */}
         <Form.Item label="问题" name="question" rules={[{ required: true, message: '请输入名称' }]}>
           <AutoComplete options={commonQuestion}>
             <Input suffix={`${questionInputVal.length} / 70`} placeholder="请输入" />
@@ -259,7 +259,7 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
               style={{ marginBottom: 40 }}
               itemRender={uploadListRender}
               fileList={uploadList}
-              onChange={onUploadAdd}
+              onChange={onChangeUploadList}
             >
               <Button type="text" style={{ position: 'absolute', bottom: -6, color: '#20BB7A' }}>
                 + 继续上传
@@ -267,7 +267,7 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
             </Upload>
           )}
         </Form.Item>
-        {/* 操作按钮 */}
+        {/* 脚部操作按钮 */}
         {footerBottomRender}
       </ModalForm>
       {/* 确认取消 */}

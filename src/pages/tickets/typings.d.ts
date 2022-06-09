@@ -16,8 +16,11 @@ declare namespace TICKET {
   type TicketForm = {
     question?: string; // 常见问题
     detail?: string; // 详细说明
-    questionSort?: QuestionType.HISTORY; // 问题分类
-    expirationTime?: string; // 发生时间
+    questionSort?: QuestionType.HOLIDAY; // 问题分类
+    expirationTime?: Date; // 发生时间
+    staff?: string; // 咨询员工
+    team?: string; // 所属团队
+    enclosure?: any; // 附件
   };
 
   // 列表入参

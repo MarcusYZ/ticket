@@ -1,4 +1,4 @@
-import { CommonQuestion, ListType } from './enum';
+import { CommonQuestion, ListType, QuestionType } from './enum';
 
 // 常用问题税数据
 export const commonQuestion = [
@@ -9,35 +9,63 @@ export const commonQuestion = [
 
 export const more_data = [
   {
+    id: 1,
     avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
     question: '1号咖啡机损坏',
     status: '待运维处理',
     priority: ListType.DANGER,
     date: '2021-04-08 01:18',
     time: '逾期 3 天 22 小时 44分',
+    detail: '详细信息',
+    questionSort: QuestionType.HOLIDAY,
+    expirationTime: new Date(),
+    staff: 'Gates',
+    team: '北京石景山万达店',
+    enclosure: [],
   },
   {
+    id: 2,
     avatarUrl: 'https://randomuser.me/api/portraits/women/82.jpg',
     question: '2号咖啡机损坏',
     status: '待运维处理',
     priority: ListType.WARN,
     date: '2021-04-08 01:18',
     time: '逾期 3 天 22 小时 44分',
+    detail: '详细信息',
+    questionSort: QuestionType.HOLIDAY,
+    expirationTime: new Date(),
+    staff: 'Gates',
+    team: '北京石景山万达店',
+    enclosure: [],
   },
   {
+    id: 3,
     avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
     question: '3号饮水机损坏',
     status: '待运维处理',
     priority: ListType.COMMON,
     date: '2021-04-08 01:18',
     time: '逾期 3 天 22 小时 44分',
+    detail: '详细信息',
+    questionSort: QuestionType.HOLIDAY,
+    expirationTime: new Date(),
+    staff: 'Gates',
+    team: '北京石景山万达店',
+    enclosure: [],
   },
   {
+    id: 4,
     avatarUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
     question: '4号饮水机损坏',
     status: '待运维补充材料',
     priority: ListType.NORMAL,
     date: '2021-04-08 01:18',
     time: '逾期 3 天 22 小时 44分',
+    detail: '详细信息',
+    questionSort: QuestionType.HOLIDAY,
+    expirationTime: new Date(),
+    staff: 'Gates',
+    team: '北京石景山万达店',
+    enclosure: [],
   },
 ];

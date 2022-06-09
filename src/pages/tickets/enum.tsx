@@ -14,5 +14,5 @@ export enum CommonQuestion {
 
 // 问题类型
 export enum QuestionType {
-  HISTORY = 'HISTORY',
+  HOLIDAY = 'history',
 }

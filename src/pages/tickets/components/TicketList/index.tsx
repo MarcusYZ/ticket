@@ -17,19 +17,20 @@ const LEVEL_THREE_NUM = 8;
 interface TicketListProps {
   themeType: API.ListType; // 颜色
   setVisible: React.Dispatch<React.SetStateAction<boolean | undefined>>; // 控制表单的显隐
-  setId: React.Dispatch<React.SetStateAction<number | undefined>>; // 设置Id
+  getTicketData: React.Dispatch<React.SetStateAction<TICKET.TicketItem | undefined>>; // 设置表单数据
+  setCurrentType: React.Dispatch<React.SetStateAction<ListType | undefined>>; // 当前类型
 }
 
 const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
-  const { themeType, setVisible, setId } = props;
-  const [list, setList] = useState([]); // 列表
+  const { themeType, setVisible, getTicketData, setCurrentType } = props;
+  const [list, setList] = useState<TICKET.TicketItem[]>([]); // 列表
   const [handleLoading, setHandleLoading] = useState<boolean>(false); // 让更多在加载中
 
   // 加载列表
   const { run, loading } = useRequest(getTicketList, {
     manual: true,
-    onSuccess: (data) => {
-      setList(data || []);
+    onSuccess: ({ ticketList }) => {
+      setList(ticketList || []);
     },
   });
 
@@ -46,7 +47,7 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
     },
   });
 
-  // 更新
+  // 初始化
   useEffect(() => {
     run({ level: ListType.DANGER });
   }, []);
@@ -62,6 +63,14 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
 
   // 加载更多
   const onLoadMore = async () => {
+    // 获取最后一个id为添加项赋上新的id
+    const last_id = list[list.length - 1].id;
+    more_data.map((item, index) => {
+      return {
+        ...item,
+        id: last_id + index + 1,
+      };
+    });
     const newData = list.concat(more_data);
     setHandleLoading(true);
     await waitTime(1000);
@@ -78,7 +87,8 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
           key: 'edit',
           onClick: () => {
             setVisible(true);
-            setId(item.id);
+            getTicketData(item);
+            setCurrentType(themeType);
           },
         },
         {

@@ -7,20 +7,40 @@ import TicketCreateAndEdit from './components/TicketsCreateAndEdit';
 import TopControl from './components/TopControl';
 import { ListType } from './enum';
 import styles from './index.less';
+import type { TICKET } from './typings';
 
 const Ticket: React.FC = () => {
   const [navigationListVisible, setNavigationListVisible] = useState<boolean>(false); // 左侧导航栏显隐
   const [createAndEditFormVisible, setCreateAndEditFormVisible] = useState<boolean>();
-  const [id, setId] = useState<number>(); // 列表id
-  const ref = useRef();
+  const [ticketData, setTicketData] = useState<TICKET.TicketItem>();
+  const [currentType, setCurrentType] = useState<ListType>();
+
+  const refLevel3 = useRef();
+  const refLevel2 = useRef();
+  const refLevel1 = useRef();
+  const refLevel0 = useRef();
 
   const updateList = () => {
-    if (ref.current && ref.current.run) ref.current.run(); // TODO run的类型
+    switch (currentType) {
+      case ListType.DANGER:
+        return refLevel3.current.run();
+      case ListType.WARN:
+        return refLevel2.current.run();
+      case ListType.COMMON:
+        return refLevel1.current.run();
+      case ListType.NORMAL:
+        return refLevel0.current.run();
+      default:
+        break;
+    }
   };
 
-  const createButton = () => (
+  const createButtonRender = () => (
     <Button
-      onClick={() => setCreateAndEditFormVisible(true)}
+      onClick={() => {
+        setTicketData(undefined);
+        setCreateAndEditFormVisible(true);
+      }}
       shape="circle"
       type="primary"
       style={{
@@ -34,6 +54,14 @@ const Ticket: React.FC = () => {
       <span style={{ fontSize: 22, lineHeight: '20px' }}>+</span>
     </Button>
   );
+
+  // 当前列表
+  const Lists = [
+    { ListType: ListType.DANGER, ref: refLevel3 },
+    { ListType: ListType.WARN, ref: refLevel2 },
+    { ListType: ListType.COMMON, ref: refLevel1 },
+    { ListType: ListType.NORMAL, ref: refLevel0 },
+  ];
 
   return (
     <div className={styles.cardWrapper}>
@@ -56,38 +84,24 @@ const Ticket: React.FC = () => {
         >
           {/* 顶部控制项 */}
           <TopControl />
-          {/* level3 */}
-          <TicketList
-            ref={ref}
-            themeType={ListType.DANGER}
-            setVisible={setCreateAndEditFormVisible}
-            setId={setId}
-          />
-          {/* level2 */}
-          <TicketList
-            themeType={ListType.WARN}
-            setVisible={setCreateAndEditFormVisible}
-            setId={setId}
-          />
-          {/* level1 */}
-          <TicketList
-            themeType={ListType.COMMON}
-            setVisible={setCreateAndEditFormVisible}
-            setId={setId}
-          />
-          {/* 正常 */}
-          <TicketList
-            themeType={ListType.NORMAL}
-            setVisible={setCreateAndEditFormVisible}
-            setId={setId}
-          />
+          {Lists.map((item, index) => (
+            <TicketList
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              ref={item.ref}
+              themeType={item.ListType}
+              setVisible={setCreateAndEditFormVisible}
+              getTicketData={setTicketData}
+              setCurrentType={setCurrentType}
+            />
+          ))}
         </div>
         <TicketCreateAndEdit
           visible={createAndEditFormVisible}
           setVisible={setCreateAndEditFormVisible}
-          trigger={createButton()}
-          id={id}
+          trigger={createButtonRender()}
           updateList={updateList}
+          data={ticketData}
         />
       </Card>
     </div>

@@ -28,13 +28,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = (props) => {
         <Row justify="space-between">
           {/* 控制导航栏展示隐藏 */}
           <Col style={{ verticalAlign: 'middle' }}>
-            <Button
-              style={{ marginRight: 19 }}
-              type="text"
-              shape="circle"
-              icon={<MenuOutlined />}
-              onClick={() => setNavigationListVisible(!navigationListVisible)}
-            />
+            <MenuOutlined />
             <span className={styles.headerTitleText}>Tickets</span>
           </Col>
           {/* 搜索栏 */}

@@ -6,7 +6,7 @@ import { request } from 'umi';
 // 获取工单列表
 export async function getTicketList(body: TICKET.TicketParams, options?: { [key: string]: any }) {
   return request<any>('/api/ticketList', {
-    method: 'GET',
+    method: 'POST',
     data: body,
     ...(options || {}),
   });
