@@ -19,10 +19,11 @@ interface TicketListProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean | undefined>>; // 控制表单的显隐
   getTicketData: React.Dispatch<React.SetStateAction<TICKET.TicketItem | undefined>>; // 设置表单数据
   setCurrentType: React.Dispatch<React.SetStateAction<ListType | undefined>>; // 当前类型
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>; // 设置是否是编辑
 }
 
 const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
-  const { themeType, setVisible, getTicketData, setCurrentType } = props;
+  const { themeType, setVisible, getTicketData, setCurrentType, setIsEdit } = props;
   const [list, setList] = useState<TICKET.TicketItem[]>([]); // 列表
   const [handleLoading, setHandleLoading] = useState<boolean>(false); // 让更多在加载中
 
@@ -89,6 +90,7 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
             setVisible(true);
             getTicketData(item);
             setCurrentType(themeType);
+            setIsEdit(true);
           },
         },
         {

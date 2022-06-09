@@ -11,7 +11,7 @@ import {
 } from '@ant-design/pro-components';
 import { AutoComplete, Button, Col, Divider, Form, Input, message, Row, Upload } from 'antd';
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import up1 from '../../../../../public/icons/up1.png';
 import { commonQuestion } from '../../constant';
 import { CommonQuestion } from '../../enum';
@@ -27,6 +27,7 @@ interface ticketCreateAndEditProps {
   setVisible: any; // 控制开关
   updateList: any; // 更新列表
   data?: TICKET.TicketItem; // 表格数据
+  isEdit: boolean; // 是否是编辑
 }
 
 // 表单布局
@@ -45,7 +46,7 @@ const initialValues = {
 };
 
 const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
-  const { visible = false, trigger, setVisible, updateList, data } = props;
+  const { visible = false, trigger, setVisible, updateList, data, isEdit } = props;
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
   const [questionInputVal, setQuestionInputVal] = useState<string>(''); // 问题的值
   const formRef = useRef<ProFormInstance>(); // 受控表单
@@ -76,11 +77,19 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
     if (question && question.length <= 70) setQuestionInputVal(question);
   };
 
+  useEffect(() => {
+    if (isEdit === true && visible === true) {
+      formRef.current?.setFieldsValue(data);
+    } else {
+      formRef.current?.setFieldsValue({});
+    }
+  }, [data, isEdit, visible]);
+
   // 改变状态
-  const onVisibleChange = (v: boolean) => {
-    console.log(v, data, 'data');
-    if (data) formRef.current?.setFieldsValue(data);
-    if (v === false) setConfirmVisible(true);
+  const onVisibleChange = async (v: boolean) => {
+    if (v === false) {
+      setConfirmVisible(true);
+    }
   };
 
   // 提交按钮
@@ -97,8 +106,8 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
       };
       await modifyTicketRun(result);
     }
+    await formRef.current?.setFieldsValue({});
     setVisible(false);
-    formRef.current?.resetFields();
   };
 
   // 更新上传列表
@@ -274,9 +283,9 @@ const TicketCreateAndEdit: React.FC<ticketCreateAndEditProps> = (props) => {
       <ConfirmCancel
         visible={confirmVisible}
         setVisible={setConfirmVisible}
-        confirm={() => {
+        confirm={async () => {
+          await formRef.current?.resetFields();
           setVisible(false);
-          formRef.current?.resetFields();
         }}
       />
     </>

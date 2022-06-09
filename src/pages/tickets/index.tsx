@@ -14,7 +14,7 @@ const Ticket: React.FC = () => {
   const [createAndEditFormVisible, setCreateAndEditFormVisible] = useState<boolean>();
   const [ticketData, setTicketData] = useState<TICKET.TicketItem>();
   const [currentType, setCurrentType] = useState<ListType>();
-
+  const [isEdit, setIsEdit] = useState<boolean>(true);
   const refLevel3 = useRef();
   const refLevel2 = useRef();
   const refLevel1 = useRef();
@@ -37,9 +37,12 @@ const Ticket: React.FC = () => {
 
   const createButtonRender = () => (
     <Button
-      onClick={() => {
-        setTicketData(undefined);
-        setCreateAndEditFormVisible(true);
+      onClick={async () => {
+        await setTicketData(undefined);
+        setCreateAndEditFormVisible(() => {
+          setIsEdit(false);
+          return true;
+        });
       }}
       shape="circle"
       type="primary"
@@ -91,6 +94,7 @@ const Ticket: React.FC = () => {
                 setVisible={setCreateAndEditFormVisible}
                 getTicketData={setTicketData}
                 setCurrentType={setCurrentType}
+                setIsEdit={setIsEdit}
               />
             ))}
           </div>
@@ -101,6 +105,7 @@ const Ticket: React.FC = () => {
           trigger={createButtonRender()}
           updateList={updateList}
           data={ticketData}
+          isEdit={isEdit}
         />
       </Card>
     </div>
