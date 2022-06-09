@@ -45,7 +45,7 @@ const Ticket: React.FC = () => {
       type="primary"
       style={{
         background: '#333333',
-        position: 'sticky',
+        position: 'fixed',
         float: 'right',
         right: 40,
         bottom: 52,
@@ -71,30 +71,29 @@ const Ticket: React.FC = () => {
           navigationListVisible={navigationListVisible}
           setNavigationListVisible={setNavigationListVisible}
         />
-        {/* 导航列表 */}
-        {navigationListVisible ? (
-          <div className={styles.navigationPercent}>
-            <NavigationList />
+        <div style={{ display: 'flex' }}>
+          {/* 导航列表 */}
+          {navigationListVisible ? (
+            <div className={styles.navigationPercent}>
+              <NavigationList />
+            </div>
+          ) : null}
+          {/* 列表 */}
+          <div className={styles.ticketList} style={{ width: '100%' }}>
+            {/* 顶部控制项 */}
+            <TopControl />
+            {Lists.map((item, index) => (
+              <TicketList
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                ref={item.ref}
+                themeType={item.ListType}
+                setVisible={setCreateAndEditFormVisible}
+                getTicketData={setTicketData}
+                setCurrentType={setCurrentType}
+              />
+            ))}
           </div>
-        ) : null}
-        {/* 列表 */}
-        <div
-          className={styles.ticketList}
-          style={{ width: navigationListVisible ? '75%' : '100%' }}
-        >
-          {/* 顶部控制项 */}
-          <TopControl />
-          {Lists.map((item, index) => (
-            <TicketList
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-              ref={item.ref}
-              themeType={item.ListType}
-              setVisible={setCreateAndEditFormVisible}
-              getTicketData={setTicketData}
-              setCurrentType={setCurrentType}
-            />
-          ))}
         </div>
         <TicketCreateAndEdit
           visible={createAndEditFormVisible}

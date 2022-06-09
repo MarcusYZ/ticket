@@ -4,7 +4,7 @@ import { Button, Col, Row } from 'antd';
 // 顶部功能
 const TopControl = () => {
   return (
-    <Row justify="end">
+    <Row justify="end" style={{ marginTop: 42, marginBottom: 34, marginRight: 40 }}>
       <Col>
         <Button type="text">
           <ExpandOutlined />
