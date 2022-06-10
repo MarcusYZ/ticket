@@ -35,13 +35,17 @@
 
 .listItemAvatar {
   margin-right: 12px;
-  margin-left: 20px;
 }
 
 .listItemCard_status {
-  justify-content: center;
   height: 56px;
   background-color: #fafafa;
+  :global(.ant-pro-card-body-center) {
+    justify-content: left;
+  }
+  :global(.ant-pro-card-body) {
+    padding: 0 20px;
+  }
 }
 
 .listItemCard_level {
@@ -59,8 +63,15 @@
   transform: rotate(90deg);
 }
 
-.listItemIcon {
-  margin-right: 4px;
+.listItemStatusWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.listItemStatusIcon {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
 }
 
 .cardText {
@@ -70,7 +81,7 @@
     justify-content: left;
   }
   :global(.ant-pro-card-body) {
-    padding: 0;
+    padding: 0 20px;
   }
 }
 
@@ -91,7 +102,7 @@
   float: right;
   width: 107px;
   height: 28px;
-  margin-top: 12px;
+  margin-top: 4px;
   line-height: 28px;
   text-align: center;
   background: #fafafa;

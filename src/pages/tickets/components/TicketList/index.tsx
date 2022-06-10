@@ -1,13 +1,16 @@
+import wait from '@/assets/images/wait.png';
 import { deleteTicket, getTicketList } from '@/services/swagger/ticket';
-import { DownOutlined, EllipsisOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import { DownOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Col, Dropdown, List, Menu, message, Row, Spin } from 'antd';
+import { Avatar, Col, Dropdown, List, Menu, message, Popover, Row, Spin } from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from 'umi';
 import { more_data } from '../../constant';
 import { ListType } from '../../enum';
 import type { TICKET } from '../../typings';
 import { getPriorityText, getTypeColor } from '../../util';
+import TicketInfoCard from '../TicketInfoCard';
+import UserInfoCard from '../UserInfoCard';
 import styles from './index.less';
 import ListHeader from './ListHeader';
 const LEVEL_THREE_NUM = 8;
@@ -139,16 +142,22 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
   // 问题
   const questionRender = (item: TICKET.TicketItem) => (
     <ProCard colSpan={7} className={styles.cardText} layout="center" bordered>
-      <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
-      <span style={{ color: '#494949' }}>{item.question}</span>
+      <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
+        <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
+      </Popover>
+      <Popover mouseEnterDelay={3} content={<TicketInfoCard />}>
+        <span style={{ color: '#494949' }}>{item.question}</span>
+      </Popover>
     </ProCard>
   );
 
   // 状态
   const statusRender = (item: TICKET.TicketItem) => (
     <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
-      <FieldTimeOutlined className={styles.listItemIcon} />
-      <span style={{ color: '#494949' }}>{item.status}</span>
+      <div className={styles.listItemStatusWrapper}>
+        <img src={wait} alt="" className={styles.listItemStatusIcon} />
+        <span style={{ color: '#494949' }}>{item.status}</span>
+      </div>
     </ProCard>
   );
 
@@ -199,11 +208,17 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
       className={styles.listItem}
     >
       <ProCard ghost gutter={8}>
+        {/* 详细问题 */}
         {questionRender(item)}
+        {/* 状态 */}
         {statusRender(item)}
+        {/* 优先级 */}
         {LevelRender(item)}
+        {/* 发起时间 */}
         {dateRender(item)}
+        {/* 消耗时间 */}
         {timeRender(item)}
+        {/* 操作 */}
         {operateRender(item)}
       </ProCard>
     </List.Item>
@@ -211,8 +226,11 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
 
   return (
     <div className={styles.listWrapper}>
+      {/* 大标题 */}
       <ListHeader num={LEVEL_THREE_NUM} type={themeType} />
+      {/* 小标题 */}
       <TitleRender />
+      {/* 列表 */}
       <List
         className="demo-loadmore-list"
         loading={loading || deleteTicketLoading}
