@@ -74,7 +74,7 @@
   margin-right: 6px;
 }
 
-.cardText {
+.cardQuestText {
   height: 100%;
   background-color: #fafafa;
   :global(.ant-pro-card-body-center) {
@@ -113,18 +113,8 @@
   }
 }
 
-// .moreButtonWrapper {
-//   height: 32px;
-//   line-height: 32px;
-//   text-align: right;
-// }
-
-// <div>
-// <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
-// <span>系统界面一片混乱</span>
-// </div>
-// <div>待运维补充材料</div>
-// <div>紧急</div>
-// <div>2021-04-08 01:18</div>
-// <div>逾期 3 天 22 小时 24 分</div>
-// <div>...</div>
+.listItem:hover {
+  .commonText {
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.2);
+  }
+}

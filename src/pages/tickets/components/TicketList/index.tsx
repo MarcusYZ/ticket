@@ -141,7 +141,12 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
 
   // 问题
   const questionRender = (item: TICKET.TicketItem) => (
-    <ProCard colSpan={7} className={styles.cardText} layout="center" bordered>
+    <ProCard
+      colSpan={7}
+      className={`${styles.cardQuestText} ${styles.commonText}`}
+      layout="center"
+      bordered
+    >
       <Popover mouseEnterDelay={3} content={<UserInfoCard />}>
         <Avatar src={item.avatarUrl} className={styles.listItemAvatar} />
       </Popover>
@@ -153,7 +158,12 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
 
   // 状态
   const statusRender = (item: TICKET.TicketItem) => (
-    <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_status}>
+    <ProCard
+      colSpan={4}
+      layout="center"
+      bordered
+      className={`${styles.listItemCard_status} ${styles.commonText}`}
+    >
       <div className={styles.listItemStatusWrapper}>
         <img src={wait} alt="" className={styles.listItemStatusIcon} />
         <span style={{ color: '#494949' }}>{item.status}</span>
@@ -167,7 +177,7 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
       colSpan={2}
       layout="center"
       bordered
-      className={styles.listItemCard_level}
+      className={`${styles.listItemCard_level} ${styles.commonText}`}
       style={{
         background: getTypeColor(item.priority),
       }}
@@ -178,21 +188,36 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
 
   // 发起时间
   const dateRender = (item: TICKET.TicketItem) => (
-    <ProCard colSpan={4} layout="center" bordered className={styles.listItemCard_common}>
+    <ProCard
+      colSpan={4}
+      layout="center"
+      bordered
+      className={`${styles.listItemCard_common} ${styles.commonText}`}
+    >
       <span style={{ color: '#494949' }}>{item.date}</span>
     </ProCard>
   );
 
   // 耗时
   const timeRender = (item: TICKET.TicketItem) => (
-    <ProCard colSpan={5} layout="center" bordered className={styles.listItemCard_common}>
+    <ProCard
+      colSpan={5}
+      layout="center"
+      bordered
+      className={`${styles.listItemCard_common} ${styles.commonText}`}
+    >
       <span style={{ color: '#494949' }}>{item.time}</span>
     </ProCard>
   );
 
   // 操作
   const operateRender = (item: TICKET.TicketItem) => (
-    <ProCard colSpan={2} layout="center" bordered className={styles.listItemCard_common}>
+    <ProCard
+      colSpan={2}
+      layout="center"
+      bordered
+      className={`${styles.listItemCard_common} ${styles.commonText}`}
+    >
       <Dropdown overlay={menu(item)}>
         <EllipsisOutlined className={styles.listItemOperate} />
       </Dropdown>
