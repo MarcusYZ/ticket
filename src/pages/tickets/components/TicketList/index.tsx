@@ -126,14 +126,14 @@ const TicketList: React.FC<TicketListProps> = forwardRef((props, ref) => {
   // 加载按钮
   const loadMore =
     list.length < LEVEL_THREE_NUM ? (
-      <Spin spinning={handleLoading}>
-        <div className={styles.moreButton} onClick={onLoadMore}>
+      <div className={styles.moreButton} onClick={onLoadMore}>
+        <Spin size="small" spinning={handleLoading}>
           {/* <Button  className={styles.moreButton} onClick={onLoadMore}> */}
           <DownOutlined style={{ width: 9, height: 5, marginRight: 8 }} />
           还有4条
           {/* </Button> */}
-        </div>
-      </Spin>
+        </Spin>
+      </div>
     ) : null;
 
   // 问题
